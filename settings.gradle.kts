@@ -13,7 +13,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = ("crutch")
+rootProject.name = ("crutchLib")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
