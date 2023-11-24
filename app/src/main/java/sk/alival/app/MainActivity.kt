@@ -2,7 +2,7 @@ package sk.alival.app
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.github.alivalit.crutch.app.databinding.ActivityMainBinding
+import sk.alival.app.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
