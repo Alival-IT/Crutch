@@ -12,6 +12,7 @@ android {
         minSdk = libs.versions.min.sdk.version.get().toInt()
         namespace = CrutchLibCoordinates.CRUTCH_ID
         version = CrutchLibCoordinates.CRUTCH_VERSION_NAME
+        group = CrutchLibCoordinates.CRUTCH_ID
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
