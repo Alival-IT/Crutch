@@ -1,5 +1,5 @@
 package sk.alival.crutch
 
 object CrutchTester {
-    fun a() = "b"
+    fun a(prefix: String) = "${prefix}b"
 }
