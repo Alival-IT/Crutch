@@ -8,7 +8,8 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.min.sdk.version.get().toInt()
-        namespace = "sk.alival.crutch"
+        namespace = CrutchLibCoordinates.CRUTCH_ID
+        version = CrutchLibCoordinates.CRUTCH_VERSION_NAME
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
