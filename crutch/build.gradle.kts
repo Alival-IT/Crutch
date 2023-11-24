@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.min.sdk.version.get().toInt()
-        namespace = "com.ncorti.kotlin.template.library.compose"
+        namespace = "sk.alival.crutch"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -44,7 +44,6 @@ android {
 }
 
 dependencies {
-    implementation(projects.libraryKotlin)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
 

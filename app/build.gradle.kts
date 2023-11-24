@@ -8,7 +8,7 @@ android {
 
     defaultConfig {
         minSdk = libs.versions.min.sdk.version.get().toInt()
-        namespace = "com.ncorti.kotlin.template.app"
+        namespace = "sk.alival.app"
 
         applicationId = AppCoordinates.APP_ID
         versionCode = AppCoordinates.APP_VERSION_CODE
@@ -40,25 +40,10 @@ android {
         abortOnError = true
         disable.add("GradleDependency")
     }
-
-    // Use this block to configure different flavors
-//    flavorDimensions("version")
-//    productFlavors {
-//        create("full") {
-//            dimension = "version"
-//            applicationIdSuffix = ".full"
-//        }
-//        create("demo") {
-//            dimension = "version"
-//            applicationIdSuffix = ".demo"
-//        }
-//    }
 }
 
 dependencies {
-    implementation(projects.libraryAndroid)
-    implementation(projects.libraryCompose)
-    implementation(projects.libraryKotlin)
+    implementation(projects.crutch)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraint.layout)
