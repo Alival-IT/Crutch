@@ -7,6 +7,7 @@ plugins {
 
 android {
     compileSdk = libs.versions.compile.sdk.version.get().toInt()
+    buildToolsVersion = libs.versions.buildtools.get()
 
     defaultConfig {
         minSdk = libs.versions.min.sdk.version.get().toInt()
@@ -29,7 +30,6 @@ android {
 
     buildFeatures {
         compose = true
-        viewBinding = true
         buildConfig = false
     }
 
@@ -48,8 +48,9 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "consumer-rules.pro"
             )
+            consumerProguardFiles("consumer-rules.pro")
         }
     }
 
@@ -59,6 +60,10 @@ android {
             withJavadocJar()
         }
     }
+}
+
+tasks.withType(Test::class) {
+    useJUnitPlatform()
 }
 
 kotlin {
@@ -72,19 +77,25 @@ java {
 }
 
 dependencies {
+    // Androidx
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
 
+    // Compose
     implementation(libs.androidx.activity.compose)
     implementation(libs.compose.ui)
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.foundation)
     implementation(libs.compose.material)
 
-    testImplementation(libs.junit)
+    // Logging
+    implementation(libs.timber)
 
-    debugImplementation(libs.compose.ui.test.manifest)
-    androidTestImplementation(libs.compose.ui.test.junit4)
-    androidTestImplementation(libs.androidx.test.runner)
-    androidTestImplementation(libs.androidx.test.ext.junit)
+    // Tests
+    testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.junit5.jupiter.api)
+    testImplementation(libs.junit5.jupiter.params)
+    testRuntimeOnly(libs.junit5.jupiter.engine)
+    testRuntimeOnly(libs.junit5.vitage.engine)
 }
