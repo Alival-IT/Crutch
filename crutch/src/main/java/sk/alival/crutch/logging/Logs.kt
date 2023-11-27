@@ -11,7 +11,7 @@ object Logs {
      * Custom logs
      */
     @Volatile
-    var customLogs: CustomLogs? = null
+    private var customLogs: CustomLogs? = null
 
     /**
      * Init Logs, should be called at app startup
@@ -43,14 +43,30 @@ object Logs {
     fun isDefaultLogsEnabled() = Timber.treeCount > 0
 
     /**
-     * Disable custom logs
+     * Disable custom logs, to enable them, call [init]
      */
     fun disableDefaultLogs() {
         Timber.uprootAll()
     }
 
     /**
-     * Is custom logs enabled
+     * Is [CustomLogs] enabled
      */
     fun isCustomLogsEnabled() = customLogs != null
+
+    /**
+     * Set [CustomLogs] or null to disable
+     *
+     * @param customLogs your [CustomLogs] implementation
+     */
+    fun setUpCustomLogs(customLogs: CustomLogs?) {
+        this.customLogs = customLogs
+    }
+
+    /**
+     * Get custom logs
+     *
+     * @return current [CustomLogs]
+     */
+    fun getCustomLogs(): CustomLogs? = customLogs
 }

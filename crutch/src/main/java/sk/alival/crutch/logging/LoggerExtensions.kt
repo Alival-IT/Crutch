@@ -13,7 +13,7 @@ inline fun Logs.em(tag: String? = null, crossinline message: () -> String): Logs
             }
         }.e(message())
     }
-    customLogs?.em { message() }
+    getCustomLogs()?.em { message() }
     return this
 }
 
@@ -28,7 +28,7 @@ inline fun Logs.et(tag: String? = null, crossinline t: () -> Throwable): Logs {
             }
         }.e(t())
     }
-    customLogs?.et { t() }
+    getCustomLogs()?.et { t() }
     return this
 }
 
@@ -43,7 +43,7 @@ inline fun Logs.dm(tag: String? = null, crossinline message: () -> String): Logs
             }
         }.d(message())
     }
-    customLogs?.dm { message() }
+    getCustomLogs()?.dm { message() }
     return this
 }
 
@@ -58,7 +58,7 @@ inline fun Logs.dt(tag: String? = null, crossinline t: () -> Throwable): Logs {
             }
         }.d(t())
     }
-    customLogs?.dt { t() }
+    getCustomLogs()?.dt { t() }
     return this
 }
 
@@ -73,7 +73,7 @@ inline fun Logs.wm(tag: String? = null, crossinline message: () -> String): Logs
             }
         }.w(message())
     }
-    customLogs?.wm { message() }
+    getCustomLogs()?.wm { message() }
     return this
 }
 
@@ -88,6 +88,6 @@ inline fun Logs.wt(tag: String? = null, crossinline t: () -> Throwable): Logs {
             }
         }.w(t())
     }
-    customLogs?.wt { t() }
+    getCustomLogs()?.wt { t() }
     return this
 }

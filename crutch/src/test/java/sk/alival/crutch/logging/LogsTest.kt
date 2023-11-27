@@ -101,7 +101,7 @@ class LogsTest {
     @DisplayName("Testing null CustomLogs")
     fun testNullCustomLogs() {
         Logs.init(true, null)
-        assertNull(Logs.customLogs)
+        assertNull(Logs.getCustomLogs())
     }
 
     @Test
