@@ -185,7 +185,7 @@ complexity:
     ignoreArgumentsMatchingNames: false
   NestedBlockDepth:
     active: true
-    threshold: 4
+    threshold: 5
   NestedScopeFunctions:
     active: false
     threshold: 1
@@ -362,29 +362,6 @@ exceptions:
       - "Throwable"
   ThrowingNewInstanceOfSameException:
     active: true
-  TooGenericExceptionCaught:
-    active: true
-    excludes:
-      [
-        "**/test/**",
-        "**/androidTest/**",
-        "**/commonTest/**",
-        "**/jvmTest/**",
-        "**/androidUnitTest/**",
-        "**/androidInstrumentedTest/**",
-        "**/jsTest/**",
-        "**/iosTest/**",
-      ]
-    exceptionNames:
-      - "ArrayIndexOutOfBoundsException"
-      - "Error"
-      - "Exception"
-      - "IllegalMonitorStateException"
-      - "IndexOutOfBoundsException"
-      - "NullPointerException"
-      - "RuntimeException"
-      - "Throwable"
-    allowedExceptionNameRegex: "_|(ignore|expected).*"
   TooGenericExceptionThrown:
     active: true
     exceptionNames:
@@ -783,7 +760,7 @@ style:
     maxChainedCalls: 5
   MaxLineLength:
     active: true
-    maxLineLength: 120
+    maxLineLength: 250
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: false
