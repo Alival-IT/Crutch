@@ -10,7 +10,7 @@ Android library with some common used features within my projects
 
 [Logs](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/logging/README_logging.md)
 
-[Cacheable](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/stringResources/README_stringResources.md)
+[StringResources](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/stringResources/README_stringResources.md)
 
 
 # Roadmap
