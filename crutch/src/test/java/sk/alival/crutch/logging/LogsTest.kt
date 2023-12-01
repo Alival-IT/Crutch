@@ -43,25 +43,25 @@ class LogsTest {
         val exception = RuntimeException()
 
         val l1 = Logs.et { exception }
-        assertEquals(l1, Logs)
+        assertEquals(Logs, l1)
         verify(exactly = numberOfInvocations) {
             customLogs.et(any(), any())
         }
 
         val l2 = Logs.dt { exception }
-        assertEquals(l2, Logs)
+        assertEquals(Logs, l2)
         verify(exactly = numberOfInvocations) {
             customLogs.dt(any(), any())
         }
 
         val l3 = Logs.em { "" }
-        assertEquals(l3, Logs)
+        assertEquals(Logs, l3)
         verify(exactly = numberOfInvocations) {
             customLogs.em(any(), any())
         }
 
         val l4 = Logs.dm { "" }
-        assertEquals(l4, Logs)
+        assertEquals(Logs, l4)
         verify(exactly = numberOfInvocations) {
             customLogs.dm(any(), any())
         }
