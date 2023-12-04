@@ -27,7 +27,6 @@ class CacheableDataImpl<T : Any>(
                     cache.setValue(clazz, key, it.data)
                     CacheableDataLogger.log { Logs.dm { "Storing #getNew to cache ${clazz.simpleName} with key ${key.toLogKeys()} and cacheNewValue $cacheNewValue data ${it}" } }
                 }
-            }.also {
                 CacheableDataLogger.log { Logs.dm { "Returning #getNew success for ${clazz.simpleName} with key ${key.toLogKeys()} and cacheNewValue $cacheNewValue data $it" } }
             }
         } catch (t: Throwable) {

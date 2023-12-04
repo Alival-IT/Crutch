@@ -1,4 +1,6 @@
 [![](https://jitpack.io/v/Alival-IT/Crutch.svg)](https://jitpack.io/#Alival-IT/Crutch)
+[![Maintainability](https://api.codeclimate.com/v1/badges/00440fcc83a3d6e5aec7/maintainability)](https://codeclimate.com/github/Alival-IT/Crutch/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/00440fcc83a3d6e5aec7/test_coverage)](https://codeclimate.com/github/Alival-IT/Crutch/test_coverage)
 
 # Crutch
 

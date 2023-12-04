@@ -3,6 +3,7 @@ plugins {
     kotlin("android")
     id("maven-publish")
     publish
+    jacoco
 }
 
 android {
@@ -45,6 +46,7 @@ android {
 
     buildTypes {
         getByName("release") {
+            enableUnitTestCoverage = true
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -74,6 +76,10 @@ java {
     toolchain {
         languageVersion.set(JavaLanguageVersion.of(17))
     }
+}
+
+jacoco {
+    toolVersion = "0.8.9"
 }
 
 dependencies {

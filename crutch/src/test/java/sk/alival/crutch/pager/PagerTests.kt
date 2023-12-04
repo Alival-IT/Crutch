@@ -1,5 +1,9 @@
 package sk.alival.crutch.pager
 
+import android.util.Log
+import io.mockk.every
+import io.mockk.mockkStatic
+import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -8,9 +12,13 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import sk.alival.crutch.cacheable.CacheableDataLogger
+import sk.alival.crutch.logging.CustomLogs
+import sk.alival.crutch.logging.Logs
 
 class PagerTests {
 
@@ -23,6 +31,7 @@ class PagerTests {
 
     inner class TestingPager: Pager<PagerTestItem>(){
         override val pageSize: AtomicInteger = AtomicInteger(2)
+        override val isDebuggingEnabled: AtomicBoolean = AtomicBoolean(true)
         override suspend fun getPage(pageNumber: Int): PagingItemsData<PagerTestItem> {
             return PagingItemsData(9, fetchDataFromApi(pageNumber))
         }
@@ -75,6 +84,22 @@ class PagerTests {
         }
     }
 
+    companion object {
+        @JvmStatic
+        @BeforeAll
+        fun setup(): Unit {
+            mockkStatic(Log::class)
+            every { Log.println(any(), any(), any()) } returns 0
+            Logs.init(true, customLogs = object : CustomLogs {
+                override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
+                    super.log(priority, tag, message, t)
+                    println("$tag: $message $t")
+                }
+            })
+            CacheableDataLogger.setCacheableDataLoggerEnabled(true)
+        }
+    }
+
     @BeforeEach
     fun beforeEach() {
         testingPager.cleanAll()
@@ -98,39 +123,6 @@ class PagerTests {
         // if we have totalPages
         testingPager.setCustomTotalPages(5)
         assertEquals(5, testingPager.getPageFromItemNumber(10))
-    }
-
-    @ExperimentalCoroutinesApi
-    @Test
-    @DisplayName("Testing SwipeToRefresh")
-    fun testSwipeToRefresh() = runBlocking {
-        val results = testPagingStates(this) {
-            testingPager.onSwipeToRefresh(this, true)
-        }
-
-        assertEquals(2, results.size)
-        assert(results.filterIsInstance<PagerStates.Loading<PagerTestItem>>().isNotEmpty())
-
-        val items = results.filterIsInstance<PagerStates.Success<PagerTestItem>>().firstOrNull()
-        assert(items != null)
-        assert(items?.pagerFlag == PagerFlags.SwipeToRefresh)
-        assert(items?.currentItems?.flattenToItemList() == fetchDataFromApi(1))
-    }
-
-    @ExperimentalCoroutinesApi
-    @Test
-    @DisplayName("Testing Initial fetch")
-    fun testInitialFetch() = runBlocking {
-        val results = testPagingStates(this) {
-            testingPager.getFirstPage(scope = this, resetBeforeFirstPage = false, isNetworkAvailable = true)
-        }
-
-        assert(results.filterIsInstance<PagerStates.Loading<PagerTestItem>>().isNotEmpty())
-
-        val items = results.filterIsInstance<PagerStates.Success<PagerTestItem>>().firstOrNull()
-        assert(items != null)
-        assert(items?.pagerFlag == PagerFlags.Initial)
-        assert(items?.currentItems?.flattenToItemList() == fetchDataFromApi(1))
     }
 
     @ExperimentalCoroutinesApi

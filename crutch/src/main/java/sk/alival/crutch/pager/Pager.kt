@@ -24,7 +24,7 @@ import kotlin.math.min
  */
 abstract class Pager<ITEM_TYPE : PagerItemType> {
 
-    companion object{
+    companion object {
         const val defaultPagerPageSize = 25
     }
 
@@ -41,10 +41,10 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
     open val itemOffsetBeforeNextPage: AtomicInteger = AtomicInteger(0)
 
     /**
-     * Is logs enabled, used for debugging.
+     * Is logs enabled, used for debugging and testing.
      * Defaults to false.
      */
-    open val isLogsEnabled: AtomicBoolean = AtomicBoolean(false)
+    open val isDebuggingEnabled: AtomicBoolean = AtomicBoolean(false)
 
     @Volatile
     private var actualPage: AtomicInteger = AtomicInteger(1)
@@ -60,10 +60,12 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
 
     private val pagedItems: MutableMap<Int, PagingItemsData<ITEM_TYPE>> = mutableMapOf()
 
-    private var pagingStatesFlow = MutableSharedFlow<PagerStates<ITEM_TYPE>?>(
-        replay = 1,
-        onBufferOverflow = BufferOverflow.SUSPEND
-    )
+    private val pagingStatesFlow: MutableSharedFlow<PagerStates<ITEM_TYPE>?> by lazy {
+        MutableSharedFlow(
+            replay = if (isDebuggingEnabled.get()) 10 else 1,
+            onBufferOverflow = BufferOverflow.SUSPEND
+        )
+    }
 
     /**
      * Get page
@@ -269,7 +271,6 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
      */
     @OptIn(ExperimentalCoroutinesApi::class)
     fun cleanAll() {
-        pagingStatesFlow.tryEmit(null)
         pagingStatesFlow.resetReplayCache()
         reset()
     }
@@ -312,7 +313,7 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
      * @param message
      */
     private fun log(message: String) {
-        if (isLogsEnabled.get()) {
+        if (isDebuggingEnabled.get()) {
             Logs.dm("PAGER_MANAGER") {
                 """
            $message
