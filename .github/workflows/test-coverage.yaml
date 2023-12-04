@@ -16,8 +16,21 @@ jobs:
     runs-on: ${{ matrix.os }}
     if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
     steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
       - name: Code cov
         run: ./gradlew crutch:createReleaseUnitTestCoverageReport
+
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v5.0.0
         env:
