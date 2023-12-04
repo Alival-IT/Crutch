@@ -12,10 +12,4 @@ Android library with some common used features within my projects
 
 [StringResources](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/stringResources/README_stringResources.md)
 
-
-# Roadmap
-
-- Logs  :heavy_check_mark:
-- StringResources  :heavy_check_mark:
-- CacheableData :heavy_check_mark:
-- Pager
+[Pager](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/pager/README_pager.md)
