@@ -8,7 +8,6 @@ plugins {
 
 android {
     compileSdk = libs.versions.compile.sdk.version.get().toInt()
-    buildToolsVersion = libs.versions.buildtools.get()
 
     defaultConfig {
         minSdk = libs.versions.min.sdk.version.get().toInt()
