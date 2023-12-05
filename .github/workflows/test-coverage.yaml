@@ -28,13 +28,11 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
 
-      - name: Code cov
-        run: ./gradlew crutch:createReleaseUnitTestCoverageReport
-
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v5.0.0
         env:
           CC_TEST_REPORTER_ID: ${{secrets.CC_TEST_REPORTER_ID}}
           JACOCO_SOURCE_PATH: "${{github.workspace}}/src/main/java"
         with:
-            coverageLocations: ${{github.workspace}}/target/site/jacoco/jacoco.xml:jacoco
+          coverageCommand: ./gradlew crutch:createReleaseUnitTestCoverageReport
+          coverageLocations: ${{github.workspace}}/target/site/jacoco/jacoco.xml:jacoco
