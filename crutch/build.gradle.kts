@@ -3,11 +3,11 @@ plugins {
     kotlin("android")
     id("maven-publish")
     publish
+    jacoco
 }
 
 android {
     compileSdk = libs.versions.compile.sdk.version.get().toInt()
-    buildToolsVersion = libs.versions.buildtools.get()
 
     defaultConfig {
         minSdk = libs.versions.min.sdk.version.get().toInt()
@@ -45,6 +45,7 @@ android {
 
     buildTypes {
         getByName("release") {
+            enableUnitTestCoverage = true
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -76,6 +77,10 @@ java {
     }
 }
 
+jacoco {
+    toolVersion = "0.8.9"
+}
+
 dependencies {
     // Androidx
     implementation(libs.androidx.appcompat)
@@ -98,4 +103,5 @@ dependencies {
     testImplementation(libs.junit5.jupiter.params)
     testRuntimeOnly(libs.junit5.jupiter.engine)
     testRuntimeOnly(libs.junit5.vitage.engine)
+    testImplementation(libs.coroutine.tests)
 }

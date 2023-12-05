@@ -20,7 +20,7 @@ import sk.alival.crutch.logging.CustomLogs
 import sk.alival.crutch.logging.Logs
 import kotlin.reflect.KClass
 
-class CacheableApiImplTest {
+class CacheableDataTests {
 
     private var newValueGetterData: String = "new abc"
     private var newValueGetter: NewValueGetter = mockk()

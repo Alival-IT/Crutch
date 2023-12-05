@@ -1,0 +1,50 @@
+name: Test coverage
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - "*"
+
+jobs:
+  gradle:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+    runs-on: ${{ matrix.os }}
+    if: ${{ !contains(github.event.head_commit.message, 'ci skip') }}
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: "zulu"
+          java-version: "17"
+
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+
+      - name: CodeCov
+        run: ./gradlew crutch:createReleaseUnitTestCoverageReport
+
+      - name: Read README.md
+        id: package
+        uses: jaywcjlove/github-action-read-file@main
+        with:
+          path: ${{github.workspace}}/crutch/build/reports/coverage/test/release/report.xml
+
+      - name: Echo report
+        run: echo "${{ steps.package.outputs.content }}"
+
+      - uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ${{github.workspace}}/crutch/build/reports/coverage/test/release/report.xml
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
+          verbose: true

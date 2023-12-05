@@ -1,4 +1,6 @@
-[![](https://jitpack.io/v/Alival-IT/Crutch.svg)](https://jitpack.io/#Alival-IT/Crutch)
+[![Jitpack](https://jitpack.io/v/Alival-IT/Crutch.svg)](https://jitpack.io/#Alival-IT/Crutch)
+[![Maintainability](https://api.codeclimate.com/v1/badges/00440fcc83a3d6e5aec7/maintainability)](https://codeclimate.com/github/Alival-IT/Crutch/maintainability)
+[![codecov](https://codecov.io/gh/Alival-IT/Crutch/graph/badge.svg?token=XOA5HN78S9)](https://codecov.io/gh/Alival-IT/Crutch)
 
 # Crutch
 
@@ -12,10 +14,4 @@ Android library with some common used features within my projects
 
 [StringResources](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/stringResources/README_stringResources.md)
 
-
-# Roadmap
-
-- Logs  :heavy_check_mark:
-- StringResources  :heavy_check_mark:
-- CacheableData :heavy_check_mark:
-- Pager
+[Pager](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/pager/README_pager.md)

@@ -21,6 +21,7 @@ benmanesversion = "0.50.0"
 timber = "5.0.1"
 junit5 = "5.8.2"
 buildtools = "33.0.0"
+coroutine_tests = "1.7.3"
 
 [libraries]
 junit5_jupiter_engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
@@ -45,6 +46,7 @@ detekt_formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 espresso_core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso.core" }
 agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 kgp = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+coroutine_tests = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutine_tests" }
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
