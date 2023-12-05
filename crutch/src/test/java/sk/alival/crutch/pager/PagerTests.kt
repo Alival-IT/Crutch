@@ -168,6 +168,7 @@ class PagerTests {
             testingPager.getFirstPage(scope = this, isNetworkAvailable = true)
         }
         assertEquals(1, resultsPage1.filterIsInstance<PagerStates.Loading<PagerTestItem>>().size)
+        advanceUntilIdle()
 
         // ==========================================================================================
         val resultsPage2 = testPagingStates(this) {
@@ -177,6 +178,7 @@ class PagerTests {
         assert(items2 != null)
         assert(items2?.pagerFlag == PagerFlags.Paging)
         assertEquals(fetchDataFromApi(1).plus(fetchDataFromApi(2)), items2?.currentItems?.flattenToItemList())
+        advanceUntilIdle()
 
         // ==========================================================================================
         val resultsPage3 = testPagingStates(this) {
@@ -188,6 +190,7 @@ class PagerTests {
         assertEquals(
             fetchDataFromApi(1).plus(fetchDataFromApi(2)).plus(fetchDataFromApi(3)), items3?.currentItems?.flattenToItemList()
         )
+        advanceUntilIdle()
 
         // ==========================================================================================
         val resultsPage4 = testPagingStates(this) {
@@ -203,6 +206,7 @@ class PagerTests {
                 .plus(fetchDataFromApi(4)),
             items4?.currentItems?.flattenToItemList()
         )
+        advanceUntilIdle()
 
         // ==========================================================================================
         val resultsPage5 = testPagingStates(this) {
@@ -219,6 +223,7 @@ class PagerTests {
                 .plus(fetchDataFromApi(5)),
             items5?.currentItems?.flattenToItemList()
         )
+        advanceUntilIdle()
 
         // ==========================================================================================
         val resultsPage5LastItem = testPagingStates(this) {
@@ -227,12 +232,14 @@ class PagerTests {
         val items5LastItem = resultsPage5LastItem.filterIsInstance<PagerStates.NoMorePagesAvailable<PagerTestItem>>().lastOrNull()
         assert(items5LastItem != null)
 
+        advanceUntilIdle()
         // ==========================================================================================
         val resultsPageNotExistingItem = testPagingStates(this) {
             testingPager.onItemRendered(index = 9, scope = this, isNetworkAvailable = true)
         }
         val items5NotExistingItem = resultsPageNotExistingItem.filterIsInstance<PagerStates.NoMorePagesAvailable<PagerTestItem>>().lastOrNull()
         assert(items5NotExistingItem != null)
+        advanceUntilIdle()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
