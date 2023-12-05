@@ -23,3 +23,6 @@ public static *** v(...);
 public static *** i(...);
 public static *** e(...);
 }
+
+# Keep class for safeArgs
+-keep class sk.alival.crutch.stringResources.StringResource
