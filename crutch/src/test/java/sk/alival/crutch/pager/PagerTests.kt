@@ -10,7 +10,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -29,7 +31,7 @@ class PagerTests {
             get() = "$index"
     }
 
-    inner class TestingPager: Pager<PagerTestItem>(){
+    inner class TestingPager : Pager<PagerTestItem>() {
         override val pageSize: AtomicInteger = AtomicInteger(2)
         override val isDebuggingEnabled: AtomicBoolean = AtomicBoolean(true)
         override suspend fun getPage(pageNumber: Int): PagingItemsData<PagerTestItem> {
@@ -107,7 +109,7 @@ class PagerTests {
 
     @Test
     @DisplayName("Testing page number calculation from item number")
-    fun testPageFromItemCount() {
+    fun testPageFromItemCount() = runTest {
         assertEquals(1, testingPager.getPageFromItemNumber(0).also { println(it) })
         assertEquals(1, testingPager.getPageFromItemNumber(1).also { println(it) })
         assertEquals(1, testingPager.getPageFromItemNumber(2).also { println(it) })
@@ -127,8 +129,41 @@ class PagerTests {
 
     @ExperimentalCoroutinesApi
     @Test
+    @DisplayName("Testing SwipeToRefresh")
+    fun testSwipeToRefresh() = runTest {
+        val results = testPagingStates(this) {
+            testingPager.onSwipeToRefresh(this, true)
+        }
+
+        assertEquals(2, results.size)
+        assert(results.filterIsInstance<PagerStates.Loading<PagerTestItem>>().isNotEmpty())
+
+        val items = results.filterIsInstance<PagerStates.Success<PagerTestItem>>().firstOrNull()
+        assert(items != null)
+        assert(items?.pagerFlag == PagerFlags.SwipeToRefresh)
+        assert(items?.currentItems?.flattenToItemList() == fetchDataFromApi(1))
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    @DisplayName("Testing Initial fetch")
+    fun testInitialFetch() = runTest {
+        val results = testPagingStates(this) {
+            testingPager.getFirstPage(scope = this, resetBeforeFirstPage = false, isNetworkAvailable = true)
+        }
+
+        assert(results.filterIsInstance<PagerStates.Loading<PagerTestItem>>().isNotEmpty())
+
+        val items = results.filterIsInstance<PagerStates.Success<PagerTestItem>>().firstOrNull()
+        assert(items != null)
+        assert(items?.pagerFlag == PagerFlags.Initial)
+        assert(items?.currentItems?.flattenToItemList() == fetchDataFromApi(1))
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
     @DisplayName("Testing paging")
-    fun testPaging() = runBlocking {
+    fun testPaging() = runTest {
         val resultsPage1 = testPagingStates(this) {
             testingPager.getFirstPage(scope = this, isNetworkAvailable = true)
         }
@@ -200,19 +235,19 @@ class PagerTests {
         assert(items5NotExistingItem != null)
     }
 
-    private suspend fun testPagingStates(scope: CoroutineScope, testingBlock: suspend () -> Unit): List<PagerStates<PagerTestItem>> {
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private suspend fun TestScope.testPagingStates(scope: CoroutineScope, testingBlock: suspend () -> Unit): List<PagerStates<PagerTestItem>> {
         val results = mutableListOf<PagerStates<PagerTestItem>>()
         val flow = testingPager.listenForPagingStates()
             .onEach {
                 results.add(it)
-            }
-            .launchIn(scope)
+            }.launchIn(scope)
         testingBlock()
         testingPager.getNextPageJob()?.join()
+        advanceUntilIdle()
         flow.cancelAndJoin()
         println("\n\n======= Testing results: ========\n")
         print(results.joinToString(separator = "\n"))
         return results
     }
 }
-

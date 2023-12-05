@@ -104,4 +104,9 @@ dependencies {
     testImplementation(libs.junit5.jupiter.params)
     testRuntimeOnly(libs.junit5.jupiter.engine)
     testRuntimeOnly(libs.junit5.vitage.engine)
+    testImplementation(libs.turbine)
+    testImplementation(libs.coroutine.tests)
 }
+
+// zmenit testy na pager s https://developer.android.com/kotlin/coroutines/test
+// otestovat codeClimate
