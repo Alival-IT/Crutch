@@ -31,7 +31,15 @@ jobs:
       - name: CodeCov
         run: ./gradlew crutch:createReleaseUnitTestCoverageReport
 
-      - uses: actions/checkout@v4
+      - name: Read README.md
+        id: package
+        uses: jaywcjlove/github-action-read-file@main
+        with:
+          path: ${{github.workspace}}/crutch/build/reports/coverage/test/release/report.xml
+
+      - name: Echo report
+        run: echo "${{ steps.package.outputs.content }}"
+
       - uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
