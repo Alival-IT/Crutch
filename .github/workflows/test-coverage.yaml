@@ -35,4 +35,4 @@ jobs:
           JACOCO_SOURCE_PATH: "${{github.workspace}}/src/main/java"
         with:
           coverageCommand: ./gradlew crutch:createReleaseUnitTestCoverageReport
-          coverageLocations: ${{github.workspace}}/target/site/jacoco/jacoco.xml:jacoco
+          coverageLocations: ${{github.workspace}}/crutch/build/reports/coverage/test/release/index.html:jacoco
