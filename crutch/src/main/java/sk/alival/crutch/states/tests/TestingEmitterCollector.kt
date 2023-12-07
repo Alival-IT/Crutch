@@ -1,6 +1,5 @@
 package sk.alival.crutch.states.tests
 
-import androidx.annotation.NonNull
 import java.util.Collections
 import sk.alival.crutch.states.logging.StatesLogger
 
@@ -33,7 +32,7 @@ class TestingEmitterCollector : EmitterCollector {
      * @param comparator can create a custom comparing function of 2 states if the regular == is not enough
      * @receiver
      */
-    fun <T> assertStateOrEvent(@NonNull expected: T, assertionFailedMessage: (String) -> Unit, comparator: (T, T) -> Boolean = { a, b -> a == b }) {
+    fun <T> assertStateOrEvent(expected: T, assertionFailedMessage: (String) -> Unit, comparator: (T, T) -> Boolean = { a, b -> a == b }) {
         val expectedValue = emittedStatesAndEvents.filterIsInstance(expected!!::class.java)
             .firstOrNull {
                 comparator(it, expected)
@@ -61,7 +60,7 @@ class TestingEmitterCollector : EmitterCollector {
      * @param comparator can create a custom comparing function of 2 states if the regular == is not enought
      * @receiver
      */
-    fun <T> assertLatestStateOrEvent(@NonNull expected: T, assertionFailedMessage: (String) -> Unit, comparator: (T, T) -> Boolean = { a, b -> a == b }) {
+    fun <T> assertLatestStateOrEvent(expected: T, assertionFailedMessage: (String) -> Unit, comparator: (T, T) -> Boolean = { a, b -> a == b }) {
         val last = emittedStatesAndEvents.filterIsInstance(expected!!::class.java).lastOrNull()
         val expectedValue = last?.let {
             if (comparator(it, expected)) {
@@ -93,7 +92,7 @@ class TestingEmitterCollector : EmitterCollector {
  * @see [TestingEmitterCollector.assertStateOrEvent]
  */
 @Synchronized
-fun <STATE_TYPE> TestingEmitterCollector.expectStatesOrEvents(@NonNull vararg expected: STATE_TYPE, assertionFailedMessage: (String) -> Unit, comparator: (STATE_TYPE, STATE_TYPE) -> Boolean = { a, b -> a == b }) {
+fun <STATE_TYPE> TestingEmitterCollector.expectStatesOrEvents(vararg expected: STATE_TYPE, assertionFailedMessage: (String) -> Unit, comparator: (STATE_TYPE, STATE_TYPE) -> Boolean = { a, b -> a == b }) {
     expected.forEach {
         (StatesTestManager.emitterCollector as? TestingEmitterCollector?)?.assertStateOrEvent(it, assertionFailedMessage, comparator = comparator)
             ?: error("Emitter not set")
@@ -108,7 +107,7 @@ fun <STATE_TYPE> TestingEmitterCollector.expectStatesOrEvents(@NonNull vararg ex
  * @see [TestingEmitterCollector.assertLatestStateOrEvent]
  */
 @Synchronized
-fun <STATE_TYPE> TestingEmitterCollector.expectLatestStateOrEvent(@NonNull expected: STATE_TYPE, assertionFailedMessage: (String) -> Unit, comparator: (STATE_TYPE, STATE_TYPE) -> Boolean = { a, b -> a == b }) {
+fun <STATE_TYPE> TestingEmitterCollector.expectLatestStateOrEvent(expected: STATE_TYPE, assertionFailedMessage: (String) -> Unit, comparator: (STATE_TYPE, STATE_TYPE) -> Boolean = { a, b -> a == b }) {
     (StatesTestManager.emitterCollector as? TestingEmitterCollector?)?.assertLatestStateOrEvent(expected, assertionFailedMessage, comparator = comparator)
         ?: error("Emitter not set")
 }
