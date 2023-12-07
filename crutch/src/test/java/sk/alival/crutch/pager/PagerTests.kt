@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package sk.alival.crutch.pager
 
 import android.util.Log
@@ -6,9 +8,13 @@ import io.mockk.every
 import io.mockk.mockkStatic
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -94,6 +100,8 @@ class PagerTests {
                 }
             })
             CacheableDataLogger.isCacheableDataDebugModeEnabled = AtomicBoolean(true)
+            val testDispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
+            Dispatchers.setMain(testDispatcher)
         }
     }
 
