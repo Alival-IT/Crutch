@@ -7,6 +7,7 @@ import io.mockk.mockkStatic
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -165,8 +166,8 @@ class PagerTests {
         testingPager.listenForPagingStates().test {
             expectNoEvents()
             testingPager.getFirstPage(this, true)
+            advanceUntilIdle()
             awaitItem().let {
-                assert(it is PagerStates.Loading)
                 assertEquals(it, PagerStates.Loading(1, PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
             }
             awaitItem().let {
@@ -176,8 +177,8 @@ class PagerTests {
 
             // ==========================================================================================
             testingPager.onItemRendered(index = 1, scope = this, isNetworkAvailable = true)
+            advanceUntilIdle()
             awaitItem().let {
-                assert(it is PagerStates.Loading)
                 assertEquals(
                     it, PagerStates.Loading(
                         2,
@@ -189,7 +190,6 @@ class PagerTests {
                 )
             }
             awaitItem().let {
-                assert(it is PagerStates.Success)
                 assertEquals(
                     it, PagerStates.Success(
                         PagerFlags.Paging, mapOf(
@@ -202,8 +202,8 @@ class PagerTests {
 
             // ==========================================================================================
             testingPager.onItemRendered(index = 3, scope = this, isNetworkAvailable = true)
+            advanceUntilIdle()
             awaitItem().let {
-                assert(it is PagerStates.Loading)
                 assertEquals(
                     it, PagerStates.Loading(
                         3,
@@ -216,7 +216,6 @@ class PagerTests {
                 )
             }
             awaitItem().let {
-                assert(it is PagerStates.Success)
                 assertEquals(
                     it, PagerStates.Success(
                         PagerFlags.Paging, mapOf(
@@ -230,8 +229,8 @@ class PagerTests {
 
             // ==========================================================================================
             testingPager.onItemRendered(index = 5, scope = this, isNetworkAvailable = true)
+            advanceUntilIdle()
             awaitItem().let {
-                Assertions.assertInstanceOf(PagerStates.Loading::class.java, it)
                 assertEquals(
                     it, PagerStates.Loading(
                         4,
@@ -245,7 +244,6 @@ class PagerTests {
                 )
             }
             awaitItem().let {
-                assert(it is PagerStates.Success)
                 assertEquals(
                     it, PagerStates.Success(
                         PagerFlags.Paging, mapOf(
@@ -260,8 +258,8 @@ class PagerTests {
 
             // ==========================================================================================
             testingPager.onItemRendered(index = 7, scope = this, isNetworkAvailable = true)
+            advanceUntilIdle()
             awaitItem().let {
-                Assertions.assertInstanceOf(PagerStates.Loading::class.java, it)
                 assertEquals(
                     it, PagerStates.Loading(
                         5,
@@ -276,7 +274,6 @@ class PagerTests {
                 )
             }
             awaitItem().let {
-                assert(it is PagerStates.Success)
                 assertEquals(
                     it, PagerStates.Success(
                         PagerFlags.Paging, mapOf(
@@ -292,8 +289,8 @@ class PagerTests {
 
             // ==========================================================================================
             testingPager.onItemRendered(index = 9, scope = this, isNetworkAvailable = true)
+            advanceUntilIdle()
             awaitItem().let {
-                Assertions.assertInstanceOf(PagerStates.NoMorePagesAvailable::class.java, it)
                 assertEquals(
                     it, PagerStates.NoMorePagesAvailable(
                         mapOf(
