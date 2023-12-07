@@ -1,19 +1,14 @@
 package sk.alival.crutch.pager
 
 import android.util.Log
+import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockkStatic
-import java.util.Collections
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancelAndJoin
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -120,7 +115,7 @@ class PagerTests {
         assertEquals(4, testingPager.getPageFromItemNumber(7).also { println(it) })
         assertEquals(4, testingPager.getPageFromItemNumber(8).also { println(it) })
         assertEquals(5, testingPager.getPageFromItemNumber(9).also { println(it) })
-        // if we dont have totalPages
+        // if we don't have totalPages
         assertEquals(5, testingPager.getPageFromItemNumber(10))
         // if we have totalPages
         testingPager.setCustomTotalPages(5)
@@ -131,132 +126,186 @@ class PagerTests {
     @Test
     @DisplayName("Testing SwipeToRefresh")
     fun testSwipeToRefresh() = runTest {
-        val results = testPagingStates(this) {
+        testingPager.listenForPagingStates().test {
+            expectNoEvents()
             testingPager.onSwipeToRefresh(this, true)
+            awaitItem().let {
+                assert(it is PagerStates.Loading)
+                assertEquals(it, PagerStates.Loading(1, PagerFlags.SwipeToRefresh, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
+            }
+            awaitItem().let {
+                assert(it is PagerStates.Success)
+                assertEquals(it, PagerStates.Success(PagerFlags.SwipeToRefresh, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
+            }
         }
-        advanceUntilIdle()
-        assertEquals(2, results.size)
-        assert(results.filterIsInstance<PagerStates.Loading<PagerTestItem>>().isNotEmpty())
-
-        val items = results.filterIsInstance<PagerStates.Success<PagerTestItem>>().firstOrNull()
-        assert(items != null)
-        assert(items?.pagerFlag == PagerFlags.SwipeToRefresh)
-        assert(items?.currentItems?.flattenToItemList() == fetchDataFromApi(1))
     }
 
     @ExperimentalCoroutinesApi
     @Test
     @DisplayName("Testing Initial fetch")
     fun testInitialFetch() = runTest {
-        val results = testPagingStates(this) {
-            testingPager.getFirstPage(scope = this, resetBeforeFirstPage = false, isNetworkAvailable = true)
+        testingPager.listenForPagingStates().test {
+            expectNoEvents()
+            testingPager.getFirstPage(this, true)
+            awaitItem().let {
+                assert(it is PagerStates.Loading)
+                assertEquals(it, PagerStates.Loading(1, PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
+            }
+            awaitItem().let {
+                assert(it is PagerStates.Success)
+                assertEquals(it, PagerStates.Success(PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
+            }
         }
-        advanceUntilIdle()
-        assert(results.filterIsInstance<PagerStates.Loading<PagerTestItem>>().isNotEmpty())
-
-        val items = results.filterIsInstance<PagerStates.Success<PagerTestItem>>().firstOrNull()
-        assert(items != null)
-        assert(items?.pagerFlag == PagerFlags.Initial)
-        assert(items?.currentItems?.flattenToItemList() == fetchDataFromApi(1))
     }
 
     @ExperimentalCoroutinesApi
     @Test
     @DisplayName("Testing paging")
     fun testPaging() = runTest {
-        val resultsPage1 = testPagingStates(this) {
-            testingPager.getFirstPage(scope = this, isNetworkAvailable = true)
-        }
-        advanceUntilIdle()
-        assertEquals(1, resultsPage1.filterIsInstance<PagerStates.Loading<PagerTestItem>>().size)
+        testingPager.listenForPagingStates().test {
+            expectNoEvents()
+            testingPager.getFirstPage(this, true)
+            awaitItem().let {
+                assert(it is PagerStates.Loading)
+                assertEquals(it, PagerStates.Loading(1, PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
+            }
+            awaitItem().let {
+                assert(it is PagerStates.Success)
+                assertEquals(it, PagerStates.Success(PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
+            }
 
-        // ==========================================================================================
-        val resultsPage2 = testPagingStates(this) {
+            // ==========================================================================================
             testingPager.onItemRendered(index = 1, scope = this, isNetworkAvailable = true)
-        }
-        advanceUntilIdle()
-        val items2 = resultsPage2.filterIsInstance<PagerStates.Success<PagerTestItem>>().lastOrNull()
-        assert(items2 != null)
-        assert(items2?.pagerFlag == PagerFlags.Paging)
-        assertEquals(fetchDataFromApi(1).plus(fetchDataFromApi(2)), items2?.currentItems?.flattenToItemList())
+            awaitItem().let {
+                assert(it is PagerStates.Loading)
+                assertEquals(
+                    it, PagerStates.Loading(
+                        2,
+                        PagerFlags.Paging, mapOf(
+                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2))
+                        )
+                    )
+                )
+            }
+            awaitItem().let {
+                assert(it is PagerStates.Success)
+                assertEquals(
+                    it, PagerStates.Success(
+                        PagerFlags.Paging, mapOf(
+                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2))
+                        )
+                    )
+                )
+            }
 
-        // ==========================================================================================
-        val resultsPage3 = testPagingStates(this) {
+            // ==========================================================================================
             testingPager.onItemRendered(index = 3, scope = this, isNetworkAvailable = true)
-        }
-        advanceUntilIdle()
-        val items3 = resultsPage3.filterIsInstance<PagerStates.Success<PagerTestItem>>().lastOrNull()
-        assert(items3 != null)
-        assert(items3?.pagerFlag == PagerFlags.Paging)
-        assertEquals(
-            fetchDataFromApi(1).plus(fetchDataFromApi(2)).plus(fetchDataFromApi(3)), items3?.currentItems?.flattenToItemList()
-        )
+            awaitItem().let {
+                assert(it is PagerStates.Loading)
+                assertEquals(
+                    it, PagerStates.Loading(
+                        3,
+                        PagerFlags.Paging, mapOf(
+                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3))
+                        )
+                    )
+                )
+            }
+            awaitItem().let {
+                assert(it is PagerStates.Success)
+                assertEquals(
+                    it, PagerStates.Success(
+                        PagerFlags.Paging, mapOf(
+                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3))
+                        )
+                    )
+                )
+            }
 
-        // ==========================================================================================
-        val resultsPage4 = testPagingStates(this) {
+            // ==========================================================================================
             testingPager.onItemRendered(index = 5, scope = this, isNetworkAvailable = true)
-        }
-        advanceUntilIdle()
-        val items4 = resultsPage4.filterIsInstance<PagerStates.Success<PagerTestItem>>().lastOrNull()
-        assert(items4 != null)
-        assert(items4?.pagerFlag == PagerFlags.Paging)
-        assertEquals(
-            fetchDataFromApi(1)
-                .plus(fetchDataFromApi(2))
-                .plus(fetchDataFromApi(3))
-                .plus(fetchDataFromApi(4)),
-            items4?.currentItems?.flattenToItemList()
-        )
+            awaitItem().let {
+                Assertions.assertInstanceOf(PagerStates.Loading::class.java, it)
+                assertEquals(
+                    it, PagerStates.Loading(
+                        4,
+                        PagerFlags.Paging, mapOf(
+                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
+                            4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
+                        )
+                    )
+                )
+            }
+            awaitItem().let {
+                assert(it is PagerStates.Success)
+                assertEquals(
+                    it, PagerStates.Success(
+                        PagerFlags.Paging, mapOf(
+                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
+                            4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
+                        )
+                    )
+                )
+            }
 
-        // ==========================================================================================
-        val resultsPage5 = testPagingStates(this) {
+            // ==========================================================================================
             testingPager.onItemRendered(index = 7, scope = this, isNetworkAvailable = true)
-        }
-        advanceUntilIdle()
-        val items5 = resultsPage5.filterIsInstance<PagerStates.Success<PagerTestItem>>().lastOrNull()
-        assert(items5 != null)
-        assert(items5?.pagerFlag == PagerFlags.Paging)
-        assertEquals(
-            fetchDataFromApi(1)
-                .plus(fetchDataFromApi(2))
-                .plus(fetchDataFromApi(3))
-                .plus(fetchDataFromApi(4))
-                .plus(fetchDataFromApi(5)),
-            items5?.currentItems?.flattenToItemList()
-        )
+            awaitItem().let {
+                Assertions.assertInstanceOf(PagerStates.Loading::class.java, it)
+                assertEquals(
+                    it, PagerStates.Loading(
+                        5,
+                        PagerFlags.Paging, mapOf(
+                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
+                            4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
+                            5 to Pager.PagingItemsData(9, fetchDataFromApi(5)),
+                        )
+                    )
+                )
+            }
+            awaitItem().let {
+                assert(it is PagerStates.Success)
+                assertEquals(
+                    it, PagerStates.Success(
+                        PagerFlags.Paging, mapOf(
+                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
+                            4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
+                            5 to Pager.PagingItemsData(9, fetchDataFromApi(5)),
+                        )
+                    )
+                )
+            }
 
-        // ==========================================================================================
-        val resultsPage5LastItem = testPagingStates(this) {
-            testingPager.onItemRendered(index = 8, scope = this, isNetworkAvailable = true)
-        }
-        advanceUntilIdle()
-        val items5LastItem = resultsPage5LastItem.filterIsInstance<PagerStates.NoMorePagesAvailable<PagerTestItem>>().lastOrNull()
-        assert(items5LastItem != null)
-
-        // ==========================================================================================
-        val resultsPageNotExistingItem = testPagingStates(this) {
+            // ==========================================================================================
             testingPager.onItemRendered(index = 9, scope = this, isNetworkAvailable = true)
+            awaitItem().let {
+                Assertions.assertInstanceOf(PagerStates.NoMorePagesAvailable::class.java, it)
+                assertEquals(
+                    it, PagerStates.NoMorePagesAvailable(
+                        mapOf(
+                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
+                            4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
+                            5 to Pager.PagingItemsData(9, fetchDataFromApi(5)),
+                        )
+                    )
+                )
+            }
         }
-        advanceUntilIdle()
-        val items5NotExistingItem = resultsPageNotExistingItem.filterIsInstance<PagerStates.NoMorePagesAvailable<PagerTestItem>>().lastOrNull()
-        assert(items5NotExistingItem != null)
-    }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    private suspend fun TestScope.testPagingStates(scope: CoroutineScope, testingBlock: suspend () -> Unit): List<PagerStates<PagerTestItem>> {
-        val results: MutableList<PagerStates<PagerTestItem>> = Collections.synchronizedList(mutableListOf<PagerStates<PagerTestItem>>())
-        val flow = testingPager.listenForPagingStates()
-            .onEach {
-                synchronized(results) {
-                    results.add(it)
-                }
-            }.launchIn(scope)
-        testingBlock()
-        testingPager.getNextPageJob()?.join()
-        advanceUntilIdle()
-        flow.cancelAndJoin()
-        println("\n\n======= Testing results: ========\n")
-        print(results.joinToString(separator = "\n"))
-        return results
     }
 }
