@@ -17,7 +17,7 @@ import sk.alival.crutch.states.streams.findEventByType
 import sk.alival.crutch.states.streams.findViewStateStreamByType
 import sk.alival.crutch.states.streams.registerCustomViewState
 
-class EmitTest : BaseStatesTest() {
+class EmitTests : BaseStatesTest() {
 
     private val testViewModel by lazy { StatesTestViewModel(StatesTestViewState(isLoading = false)) }
     private val testStatesModel by lazy { StatesTestStatesModel(TestScope(), StatesTestViewState()) }
