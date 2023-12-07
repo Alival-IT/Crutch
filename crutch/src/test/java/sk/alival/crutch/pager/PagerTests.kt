@@ -129,6 +129,7 @@ class PagerTests {
         testingPager.listenForPagingStates().test {
             expectNoEvents()
             testingPager.onSwipeToRefresh(this, true)
+            advanceUntilIdle()
             awaitItem().let {
                 assert(it is PagerStates.Loading)
                 assertEquals(it, PagerStates.Loading(1, PagerFlags.SwipeToRefresh, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
@@ -147,6 +148,7 @@ class PagerTests {
         testingPager.listenForPagingStates().test {
             expectNoEvents()
             testingPager.getFirstPage(this, true)
+            advanceUntilIdle()
             awaitItem().let {
                 assert(it is PagerStates.Loading)
                 assertEquals(it, PagerStates.Loading(1, PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
