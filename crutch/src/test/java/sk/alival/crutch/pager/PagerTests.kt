@@ -3,6 +3,7 @@ package sk.alival.crutch.pager
 import android.util.Log
 import io.mockk.every
 import io.mockk.mockkStatic
+import java.util.Collections
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +34,6 @@ class PagerTests {
 
     inner class TestingPager : Pager<PagerTestItem>() {
         override val pageSize: AtomicInteger = AtomicInteger(2)
-        override val isDebuggingEnabled: AtomicBoolean = AtomicBoolean(true)
         override suspend fun getPage(pageNumber: Int): PagingItemsData<PagerTestItem> {
             return PagingItemsData(9, fetchDataFromApi(pageNumber))
         }
@@ -98,7 +98,7 @@ class PagerTests {
                     println("$tag: $message $t")
                 }
             })
-            CacheableDataLogger.setCacheableDataLoggerEnabled(true)
+            CacheableDataLogger.isCacheableDataDebugModeEnabled = AtomicBoolean(true)
         }
     }
 
@@ -134,7 +134,7 @@ class PagerTests {
         val results = testPagingStates(this) {
             testingPager.onSwipeToRefresh(this, true)
         }
-
+        advanceUntilIdle()
         assertEquals(2, results.size)
         assert(results.filterIsInstance<PagerStates.Loading<PagerTestItem>>().isNotEmpty())
 
@@ -151,7 +151,7 @@ class PagerTests {
         val results = testPagingStates(this) {
             testingPager.getFirstPage(scope = this, resetBeforeFirstPage = false, isNetworkAvailable = true)
         }
-
+        advanceUntilIdle()
         assert(results.filterIsInstance<PagerStates.Loading<PagerTestItem>>().isNotEmpty())
 
         val items = results.filterIsInstance<PagerStates.Success<PagerTestItem>>().firstOrNull()
@@ -167,35 +167,36 @@ class PagerTests {
         val resultsPage1 = testPagingStates(this) {
             testingPager.getFirstPage(scope = this, isNetworkAvailable = true)
         }
-        assertEquals(1, resultsPage1.filterIsInstance<PagerStates.Loading<PagerTestItem>>().size)
         advanceUntilIdle()
+        assertEquals(1, resultsPage1.filterIsInstance<PagerStates.Loading<PagerTestItem>>().size)
 
         // ==========================================================================================
         val resultsPage2 = testPagingStates(this) {
             testingPager.onItemRendered(index = 1, scope = this, isNetworkAvailable = true)
         }
+        advanceUntilIdle()
         val items2 = resultsPage2.filterIsInstance<PagerStates.Success<PagerTestItem>>().lastOrNull()
         assert(items2 != null)
         assert(items2?.pagerFlag == PagerFlags.Paging)
         assertEquals(fetchDataFromApi(1).plus(fetchDataFromApi(2)), items2?.currentItems?.flattenToItemList())
-        advanceUntilIdle()
 
         // ==========================================================================================
         val resultsPage3 = testPagingStates(this) {
             testingPager.onItemRendered(index = 3, scope = this, isNetworkAvailable = true)
         }
+        advanceUntilIdle()
         val items3 = resultsPage3.filterIsInstance<PagerStates.Success<PagerTestItem>>().lastOrNull()
         assert(items3 != null)
         assert(items3?.pagerFlag == PagerFlags.Paging)
         assertEquals(
             fetchDataFromApi(1).plus(fetchDataFromApi(2)).plus(fetchDataFromApi(3)), items3?.currentItems?.flattenToItemList()
         )
-        advanceUntilIdle()
 
         // ==========================================================================================
         val resultsPage4 = testPagingStates(this) {
             testingPager.onItemRendered(index = 5, scope = this, isNetworkAvailable = true)
         }
+        advanceUntilIdle()
         val items4 = resultsPage4.filterIsInstance<PagerStates.Success<PagerTestItem>>().lastOrNull()
         assert(items4 != null)
         assert(items4?.pagerFlag == PagerFlags.Paging)
@@ -206,12 +207,12 @@ class PagerTests {
                 .plus(fetchDataFromApi(4)),
             items4?.currentItems?.flattenToItemList()
         )
-        advanceUntilIdle()
 
         // ==========================================================================================
         val resultsPage5 = testPagingStates(this) {
             testingPager.onItemRendered(index = 7, scope = this, isNetworkAvailable = true)
         }
+        advanceUntilIdle()
         val items5 = resultsPage5.filterIsInstance<PagerStates.Success<PagerTestItem>>().lastOrNull()
         assert(items5 != null)
         assert(items5?.pagerFlag == PagerFlags.Paging)
@@ -223,31 +224,32 @@ class PagerTests {
                 .plus(fetchDataFromApi(5)),
             items5?.currentItems?.flattenToItemList()
         )
-        advanceUntilIdle()
 
         // ==========================================================================================
         val resultsPage5LastItem = testPagingStates(this) {
             testingPager.onItemRendered(index = 8, scope = this, isNetworkAvailable = true)
         }
+        advanceUntilIdle()
         val items5LastItem = resultsPage5LastItem.filterIsInstance<PagerStates.NoMorePagesAvailable<PagerTestItem>>().lastOrNull()
         assert(items5LastItem != null)
 
-        advanceUntilIdle()
         // ==========================================================================================
         val resultsPageNotExistingItem = testPagingStates(this) {
             testingPager.onItemRendered(index = 9, scope = this, isNetworkAvailable = true)
         }
+        advanceUntilIdle()
         val items5NotExistingItem = resultsPageNotExistingItem.filterIsInstance<PagerStates.NoMorePagesAvailable<PagerTestItem>>().lastOrNull()
         assert(items5NotExistingItem != null)
-        advanceUntilIdle()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private suspend fun TestScope.testPagingStates(scope: CoroutineScope, testingBlock: suspend () -> Unit): List<PagerStates<PagerTestItem>> {
-        val results = mutableListOf<PagerStates<PagerTestItem>>()
+        val results: MutableList<PagerStates<PagerTestItem>> = Collections.synchronizedList(mutableListOf<PagerStates<PagerTestItem>>())
         val flow = testingPager.listenForPagingStates()
             .onEach {
-                results.add(it)
+                synchronized(results) {
+                    results.add(it)
+                }
             }.launchIn(scope)
         testingBlock()
         testingPager.getNextPageJob()?.join()

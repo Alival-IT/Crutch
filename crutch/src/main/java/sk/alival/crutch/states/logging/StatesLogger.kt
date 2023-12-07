@@ -1,31 +1,31 @@
-package sk.alival.crutch.cacheable
+package sk.alival.crutch.states.logging
 
 import java.util.concurrent.atomic.AtomicBoolean
 import sk.alival.crutch.logging.Logs
 import sk.alival.crutch.logging.dm
 
 /**
- * Cacheable data logger to ease up debugging
+ * States logger to ease up debugging
  *
  */
-object CacheableDataLogger {
+object StatesLogger {
     /**
-     * Is Cacheable data debug mode enabled. You will see everything that happens in the library in the logcat.
+     * Is states debug mode enabled. You will see everything that happens in the library in the logcat.
      */
     @Suppress("MemberVisibilityCanBePrivate")
-    var isCacheableDataDebugModeEnabled: AtomicBoolean = AtomicBoolean(false)
+    var isStatesDebugModeEnabled: AtomicBoolean = AtomicBoolean(false)
 
     /**
-     * Log method used by [CacheableData]
+     * Log method used by [sk.alival.crutch.states.States]
      *
      * Uses [Logs] if enabled, otherwise [println]
      *
      * @param log to log
      */
     inline fun log(crossinline log: () -> String) {
-        if (isCacheableDataDebugModeEnabled.get()) {
+        if (isStatesDebugModeEnabled.get()) {
             if (Logs.isCustomLogsEnabled() || Logs.isDefaultLogsEnabled()) {
-                Logs.dm("CacheableDataLogger", log)
+                Logs.dm("StatesLogger", log)
             } else {
                 println(log())
             }

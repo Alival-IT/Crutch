@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.foundation)
     implementation(libs.compose.material)
+    implementation(libs.compose.lifecycle)
 
     // Logging
     implementation(libs.timber)

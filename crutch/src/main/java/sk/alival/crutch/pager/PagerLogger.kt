@@ -1,31 +1,31 @@
-package sk.alival.crutch.cacheable
+package sk.alival.crutch.pager
 
 import java.util.concurrent.atomic.AtomicBoolean
 import sk.alival.crutch.logging.Logs
 import sk.alival.crutch.logging.dm
 
 /**
- * Cacheable data logger to ease up debugging
+ * Pager logger to ease up debugging
  *
  */
-object CacheableDataLogger {
+object PagerLogger {
     /**
-     * Is Cacheable data debug mode enabled. You will see everything that happens in the library in the logcat.
+     * Is pager debug mode enabled. You will see everything that happens in the library in the logcat.
      */
     @Suppress("MemberVisibilityCanBePrivate")
-    var isCacheableDataDebugModeEnabled: AtomicBoolean = AtomicBoolean(false)
+    var isPagerDebugModeEnabled: AtomicBoolean = AtomicBoolean(false)
 
     /**
-     * Log method used by [CacheableData]
+     * Log method used by [Pager]
      *
      * Uses [Logs] if enabled, otherwise [println]
      *
      * @param log to log
      */
     inline fun log(crossinline log: () -> String) {
-        if (isCacheableDataDebugModeEnabled.get()) {
+        if (isPagerDebugModeEnabled.get()) {
             if (Logs.isCustomLogsEnabled() || Logs.isDefaultLogsEnabled()) {
-                Logs.dm("CacheableDataLogger", log)
+                Logs.dm("PagerLogger", log)
             } else {
                 println(log())
             }

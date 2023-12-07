@@ -1,19 +1,15 @@
 package sk.alival.crutch.pager
 
 import java.net.ConnectException
-import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onEach
 import sk.alival.crutch.coroutines.launchIO
-import sk.alival.crutch.logging.Logs
-import sk.alival.crutch.logging.dm
+import sk.alival.crutch.logging.getNameForLogs
 import kotlin.math.ceil
 import kotlin.math.min
 
@@ -40,12 +36,6 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
      */
     open val itemOffsetBeforeNextPage: AtomicInteger = AtomicInteger(0)
 
-    /**
-     * Is logs enabled, used for debugging and testing.
-     * Defaults to false.
-     */
-    open val isDebuggingEnabled: AtomicBoolean = AtomicBoolean(false)
-
     @Volatile
     private var actualPage: AtomicInteger = AtomicInteger(1)
 
@@ -60,12 +50,7 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
 
     private val pagedItems: MutableMap<Int, PagingItemsData<ITEM_TYPE>> = mutableMapOf()
 
-    private val pagingStatesFlow: MutableSharedFlow<PagerStates<ITEM_TYPE>?> by lazy {
-        MutableSharedFlow(
-            replay = if (isDebuggingEnabled.get()) 10 else 1,
-            onBufferOverflow = BufferOverflow.SUSPEND
-        )
-    }
+    private val pagingStatesFlow: MutableStateFlow<PagerStates<ITEM_TYPE>?> by lazy { MutableStateFlow(null) }
 
     /**
      * Get page
@@ -81,7 +66,7 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
      */
     fun listenForPagingStates(): Flow<PagerStates<ITEM_TYPE>> {
         return pagingStatesFlow.filterNotNull().onEach {
-            log("state: $it  type: ${it::class.java.simpleName}")
+            log("state: $it  type: ${it::class.java.getNameForLogs()}")
         }
     }
 
@@ -269,9 +254,7 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
      * Cleans pager, useful when we want to re-init pager with different configuration, also cleaning the stream for [listenForPagingStates]
      *
      */
-    @OptIn(ExperimentalCoroutinesApi::class)
     fun cleanAll() {
-        pagingStatesFlow.resetReplayCache()
         reset()
     }
 
@@ -313,9 +296,8 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
      * @param message
      */
     private fun log(message: String) {
-        if (isDebuggingEnabled.get()) {
-            Logs.dm("PAGER_MANAGER") {
-                """
+        PagerLogger.log {
+            """
            $message
            actualPage: $actualPage
            totalPages: $totalPages
@@ -323,7 +305,6 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
            pageSize: $pageSize
            itemOffsetBeforeNextPage: $itemOffsetBeforeNextPage
                 """.trimIndent()
-            }
         }
     }
 
