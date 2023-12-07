@@ -9,7 +9,6 @@ import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.BeforeEach
@@ -167,9 +166,7 @@ class PagerTests {
             expectNoEvents()
             testingPager.getFirstPage(this, true)
             advanceUntilIdle()
-            awaitItem().let {
-                assertEquals(it, PagerStates.Loading(1, PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
-            }
+            assertEquals(awaitItem(), PagerStates.Loading(1, PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
             awaitItem().let {
                 assert(it is PagerStates.Success)
                 assertEquals(it, PagerStates.Success(PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
@@ -178,131 +175,113 @@ class PagerTests {
             // ==========================================================================================
             testingPager.onItemRendered(index = 1, scope = this, isNetworkAvailable = true)
             advanceUntilIdle()
-            awaitItem().let {
-                assertEquals(
-                    it, PagerStates.Loading(
-                        2,
-                        PagerFlags.Paging, mapOf(
-                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
-                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2))
-                        )
+            assertEquals(
+                awaitItem(), PagerStates.Loading(
+                    2,
+                    PagerFlags.Paging, mapOf(
+                        1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                        2 to Pager.PagingItemsData(9, fetchDataFromApi(2))
                     )
                 )
-            }
-            awaitItem().let {
-                assertEquals(
-                    it, PagerStates.Success(
-                        PagerFlags.Paging, mapOf(
-                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
-                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2))
-                        )
+            )
+            assertEquals(
+                awaitItem(), PagerStates.Success(
+                    PagerFlags.Paging, mapOf(
+                        1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                        2 to Pager.PagingItemsData(9, fetchDataFromApi(2))
                     )
                 )
-            }
+            )
 
             // ==========================================================================================
             testingPager.onItemRendered(index = 3, scope = this, isNetworkAvailable = true)
             advanceUntilIdle()
-            awaitItem().let {
-                assertEquals(
-                    it, PagerStates.Loading(
-                        3,
-                        PagerFlags.Paging, mapOf(
-                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
-                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
-                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3))
-                        )
+            assertEquals(
+                awaitItem(), PagerStates.Loading(
+                    3,
+                    PagerFlags.Paging, mapOf(
+                        1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                        2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                        3 to Pager.PagingItemsData(9, fetchDataFromApi(3))
                     )
                 )
-            }
-            awaitItem().let {
-                assertEquals(
-                    it, PagerStates.Success(
-                        PagerFlags.Paging, mapOf(
-                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
-                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
-                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3))
-                        )
+            )
+            assertEquals(
+                awaitItem(), PagerStates.Success(
+                    PagerFlags.Paging, mapOf(
+                        1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                        2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                        3 to Pager.PagingItemsData(9, fetchDataFromApi(3))
                     )
                 )
-            }
+            )
 
             // ==========================================================================================
             testingPager.onItemRendered(index = 5, scope = this, isNetworkAvailable = true)
             advanceUntilIdle()
-            awaitItem().let {
-                assertEquals(
-                    it, PagerStates.Loading(
-                        4,
-                        PagerFlags.Paging, mapOf(
-                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
-                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
-                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
-                            4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
-                        )
+            assertEquals(
+                awaitItem(), PagerStates.Loading(
+                    4,
+                    PagerFlags.Paging, mapOf(
+                        1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                        2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                        3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
+                        4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
                     )
                 )
-            }
-            awaitItem().let {
-                assertEquals(
-                    it, PagerStates.Success(
-                        PagerFlags.Paging, mapOf(
-                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
-                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
-                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
-                            4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
-                        )
+            )
+            assertEquals(
+                awaitItem(), PagerStates.Success(
+                    PagerFlags.Paging, mapOf(
+                        1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                        2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                        3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
+                        4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
                     )
                 )
-            }
+            )
 
             // ==========================================================================================
             testingPager.onItemRendered(index = 7, scope = this, isNetworkAvailable = true)
             advanceUntilIdle()
-            awaitItem().let {
-                assertEquals(
-                    it, PagerStates.Loading(
-                        5,
-                        PagerFlags.Paging, mapOf(
-                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
-                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
-                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
-                            4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
-                            5 to Pager.PagingItemsData(9, fetchDataFromApi(5)),
-                        )
+            assertEquals(
+                awaitItem(), PagerStates.Loading(
+                    5,
+                    PagerFlags.Paging, mapOf(
+                        1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                        2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                        3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
+                        4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
+                        5 to Pager.PagingItemsData(9, fetchDataFromApi(5)),
                     )
                 )
-            }
-            awaitItem().let {
-                assertEquals(
-                    it, PagerStates.Success(
-                        PagerFlags.Paging, mapOf(
-                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
-                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
-                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
-                            4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
-                            5 to Pager.PagingItemsData(9, fetchDataFromApi(5)),
-                        )
+            )
+            assertEquals(
+                awaitItem(), PagerStates.Success(
+                    PagerFlags.Paging, mapOf(
+                        1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                        2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                        3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
+                        4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
+                        5 to Pager.PagingItemsData(9, fetchDataFromApi(5)),
                     )
                 )
-            }
+            )
 
             // ==========================================================================================
             testingPager.onItemRendered(index = 9, scope = this, isNetworkAvailable = true)
             advanceUntilIdle()
-            awaitItem().let {
-                assertEquals(
-                    it, PagerStates.NoMorePagesAvailable(
-                        mapOf(
-                            1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
-                            2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
-                            3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
-                            4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
-                            5 to Pager.PagingItemsData(9, fetchDataFromApi(5)),
-                        )
+            assertEquals(
+                awaitItem(), PagerStates.NoMorePagesAvailable(
+                    mapOf(
+                        1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
+                        2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
+                        3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
+                        4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
+                        5 to Pager.PagingItemsData(9, fetchDataFromApi(5)),
                     )
                 )
-            }
+            )
         }
     }
 }
