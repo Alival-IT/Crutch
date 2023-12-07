@@ -40,7 +40,7 @@ class PagerTests {
         }
     }
 
-    private val testingPager = TestingPager()
+    private var testingPager = TestingPager()
 
     // total Items 9
     // total pages 5
@@ -105,11 +105,6 @@ class PagerTests {
         }
     }
 
-    @BeforeEach
-    fun beforeEach() {
-        testingPager.cleanAll()
-    }
-
     @Test
     @DisplayName("Testing page number calculation from item number")
     fun testPageFromItemCount() = runTest {
@@ -132,38 +127,32 @@ class PagerTests {
 
     @ExperimentalCoroutinesApi
     @Test
-    @DisplayName("Testing SwipeToRefresh")
-    fun testSwipeToRefresh() = runTest {
+    @DisplayName("Testing init fetch")
+    fun testInit() = runTest {
         testingPager.listenForPagingStates().test {
             expectNoEvents()
-            testingPager.onSwipeToRefresh(this, true)
+            testingPager.getFirstPage(this, true)
             advanceUntilIdle()
-            awaitItem().let {
-                assert(it is PagerStates.Loading)
-                assertEquals(it, PagerStates.Loading(1, PagerFlags.SwipeToRefresh, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
-            }
+            assertEquals(PagerStates.Loading<PagerTestItem>(1, PagerFlags.Initial, mapOf()), awaitItem())
             awaitItem().let {
                 assert(it is PagerStates.Success)
-                assertEquals(it, PagerStates.Success(PagerFlags.SwipeToRefresh, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
+                assertEquals(it, PagerStates.Success(PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
             }
         }
     }
 
     @ExperimentalCoroutinesApi
     @Test
-    @DisplayName("Testing Initial fetch")
-    fun testInitialFetch() = runTest {
+    @DisplayName("Testing SwipeToRefresh")
+    fun testSwipeToRefresh() = runTest {
         testingPager.listenForPagingStates().test {
             expectNoEvents()
-            testingPager.getFirstPage(this, true)
+            testingPager.onSwipeToRefresh(this, true)
             advanceUntilIdle()
-            awaitItem().let {
-                assert(it is PagerStates.Loading)
-                assertEquals(it, PagerStates.Loading(1, PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
-            }
+            assertEquals(PagerStates.Loading<PagerTestItem>(1, PagerFlags.SwipeToRefresh, mapOf()), awaitItem())
             awaitItem().let {
                 assert(it is PagerStates.Success)
-                assertEquals(it, PagerStates.Success(PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
+                assertEquals(it, PagerStates.Success(PagerFlags.SwipeToRefresh, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
             }
         }
     }
@@ -176,7 +165,7 @@ class PagerTests {
             expectNoEvents()
             testingPager.getFirstPage(this, true)
             advanceUntilIdle()
-            assertEquals(awaitItem(), PagerStates.Loading(1, PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
+            assertEquals(awaitItem(), PagerStates.Loading<PagerTestItem>(1, PagerFlags.Initial, mapOf()))
             awaitItem().let {
                 assert(it is PagerStates.Success)
                 assertEquals(it, PagerStates.Success(PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
@@ -189,8 +178,7 @@ class PagerTests {
                 awaitItem(), PagerStates.Loading(
                     2,
                     PagerFlags.Paging, mapOf(
-                        1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
-                        2 to Pager.PagingItemsData(9, fetchDataFromApi(2))
+                        1 to Pager.PagingItemsData(9, fetchDataFromApi(1))
                     )
                 )
             )
@@ -211,8 +199,7 @@ class PagerTests {
                     3,
                     PagerFlags.Paging, mapOf(
                         1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
-                        2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
-                        3 to Pager.PagingItemsData(9, fetchDataFromApi(3))
+                        2 to Pager.PagingItemsData(9, fetchDataFromApi(2))
                     )
                 )
             )
@@ -235,8 +222,7 @@ class PagerTests {
                     PagerFlags.Paging, mapOf(
                         1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
                         2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
-                        3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
-                        4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
+                        3 to Pager.PagingItemsData(9, fetchDataFromApi(3))
                     )
                 )
             )
@@ -261,8 +247,7 @@ class PagerTests {
                         1 to Pager.PagingItemsData(9, fetchDataFromApi(1)),
                         2 to Pager.PagingItemsData(9, fetchDataFromApi(2)),
                         3 to Pager.PagingItemsData(9, fetchDataFromApi(3)),
-                        4 to Pager.PagingItemsData(9, fetchDataFromApi(4)),
-                        5 to Pager.PagingItemsData(9, fetchDataFromApi(5)),
+                        4 to Pager.PagingItemsData(9, fetchDataFromApi(4))
                     )
                 )
             )

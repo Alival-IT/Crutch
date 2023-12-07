@@ -1,9 +1,11 @@
 package sk.alival.crutch.pager
 
 import java.net.ConnectException
+import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancelAndJoin
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
@@ -48,9 +50,9 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
     @Volatile
     private var pageFetchingJob: Job? = null
 
-    private val pagedItems: MutableMap<Int, PagingItemsData<ITEM_TYPE>> = mutableMapOf()
+    private var pagedItems: MutableMap<Int, PagingItemsData<ITEM_TYPE>> = mutableMapOf()
 
-    private val pagingStatesFlow: MutableStateFlow<PagerStates<ITEM_TYPE>?> by lazy { MutableStateFlow(null) }
+    private var pagingStatesFlow: MutableStateFlow<PagerStates<ITEM_TYPE>?> = MutableStateFlow(null)
 
     /**
      * Get page
@@ -65,9 +67,10 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
      *
      */
     fun listenForPagingStates(): Flow<PagerStates<ITEM_TYPE>> {
-        return pagingStatesFlow.filterNotNull().onEach {
-            log("state: $it  type: ${it::class.java.getNameForLogs()}")
-        }
+        return pagingStatesFlow.filterNotNull()
+            .onEach {
+                log("state: $it  type: ${it::class.java.getNameForLogs()}")
+            }
     }
 
     /**
@@ -111,7 +114,7 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
      * @param isNetworkAvailable  check if network is available
      * @param resetBeforeFirstPage  flag to mark if we should completely reset the pager
      */
-    fun getFirstPage(
+    suspend fun getFirstPage(
         scope: CoroutineScope,
         isNetworkAvailable: Boolean? = null,
         resetBeforeFirstPage: Boolean = true,
@@ -172,13 +175,13 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
             pageFetchingJob = scope.launchIO {
                 if (!isAllowedToDownloadNextPage) {
                     log("Not allowed to download more pages")
-                    pagingStatesFlow.emit(PagerStates.NoMorePagesAvailable(pagedItems))
+                    pagingStatesFlow.emit(PagerStates.NoMorePagesAvailable(pagedItems.toMap()))
                 } else {
                     if (isNetworkAvailable != false) {
-                        pagingStatesFlow.emit(PagerStates.Loading(nextPageNumber, pagerFlag, pagedItems))
+                        pagingStatesFlow.emit(PagerStates.Loading(nextPageNumber, pagerFlag, pagedItems.toMap()))
                         try {
                             val nextPageData = getPage(nextPageNumber)
-                            log("nextPageData before resetBeforeSuccess:$resetBeforeSuccess : $nextPageData, source: $pagerFlag")
+                            log("nextPageData before resetBeforeSuccess: $resetBeforeSuccess, data: $nextPageData, source: $pagerFlag")
                             if (resetBeforeSuccess) {
                                 clearData()
                             }
@@ -186,15 +189,15 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
                             actualPage = AtomicInteger(nextPageNumber)
                             totalItemsCount = AtomicInteger(nextPageData.totalItemsNumber)
                             pagedItems[actualPage.get()] = nextPageData
-                            pagingStatesFlow.emit(PagerStates.Success(pagerFlag, pagedItems))
+                            pagingStatesFlow.emit(PagerStates.Success(pagerFlag, pagedItems.toMap()))
                             log("nextPageData after resetBeforeSuccess:$resetBeforeSuccess : $nextPageData, source: $pagerFlag")
                         } catch (t: Throwable) {
                             log(t.toString())
-                            pagingStatesFlow.emit(PagerStates.Error(t, pagerFlag, pagedItems))
+                            pagingStatesFlow.emit(PagerStates.Error(t, pagerFlag, pagedItems.toMap()))
                         }
                     } else {
                         log("Seems like we don't have connection")
-                        pagingStatesFlow.emit(PagerStates.Error(ConnectException("No internet"), pagerFlag, pagedItems))
+                        pagingStatesFlow.emit(PagerStates.Error(ConnectException("No internet"), pagerFlag, pagedItems.toMap()))
                     }
                 }
             }
@@ -243,18 +246,19 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
         log("refreshing all pages")
         pagedItems.keys.forEach { availablePageCount ->
             getPage(availablePageCount).also {
-                log("refreshing page $availablePageCount, totalItems: $totalItemsCount, itemsForPage: $it, totalItemsData: $pagedItems")
+                log("refreshing page $availablePageCount, totalItems: $totalItemsCount, itemsForPage: $it, totalItemsData: ${pagedItems.toMap()}")
             }
         }
         log("Emitting after refresh")
-        pagingStatesFlow.emit(PagerStates.Success(PagerFlags.RefreshingAllPages, pagedItems))
+        pagingStatesFlow.emit(PagerStates.Success(PagerFlags.RefreshingAllPages, pagedItems.toMap()))
     }
 
     /**
      * Cleans pager, useful when we want to re-init pager with different configuration, also cleaning the stream for [listenForPagingStates]
      *
      */
-    fun cleanAll() {
+    suspend fun cleanAll() {
+        this.pagingStatesFlow = MutableStateFlow(null)
         reset()
     }
 
@@ -262,9 +266,9 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
      * Reset the pager and cancel the current running [getPage]
      *
      */
-    private fun reset() {
+    private suspend fun reset() {
         log("resetting pagerManager")
-        pageFetchingJob?.cancel()
+        pageFetchingJob?.cancelAndJoin()
         pageFetchingJob = null
         clearData()
     }
@@ -274,11 +278,11 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
      *
      */
     private fun clearData() {
-        log("clearing data of pagerManager")
         actualPage = AtomicInteger(1)
         totalPages = null
         totalItemsCount = AtomicInteger(1)
         pagedItems.clear()
+        log("clearing data of pagerManager")
     }
 
     /**

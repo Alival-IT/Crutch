@@ -47,6 +47,7 @@ class TestingEmitterCollector : EmitterCollector {
                 }"
             )
         } else {
+            @Suppress("UNNECESSARY_NOT_NULL_ASSERTION")
             emittedStatesAndEvents.filterIsInstance(expected!!::class.java).dropWhile { item -> !comparator(item, expected) }
             emittedStatesAndEvents.remove(expectedValue)
         }
