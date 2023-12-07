@@ -1,7 +1,6 @@
 package sk.alival.crutch.pager
 
 import java.net.ConnectException
-import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
