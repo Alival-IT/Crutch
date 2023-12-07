@@ -5,8 +5,6 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.AnnotatedString
 import java.io.Serializable
-import sk.alival.crutch.logging.Logs
-import sk.alival.crutch.logging.dt
 
 /**
  * String resource to unify passing string values or ids with safe params
@@ -26,8 +24,7 @@ sealed class StringResource : Serializable {
      * @constructor Create StringIdResource with StringRes and optional params
      */
     @Immutable
-    class StringIdResource(@StringRes val stringId: Int, vararg val params: Any) :
-        StringResource() {
+    class StringIdResource(@StringRes val stringId: Int, vararg val params: Any) : StringResource() {
         override fun hashCode(): Int {
             var result = stringId
             result = 31 * result + params.contentHashCode()
@@ -122,6 +119,7 @@ sealed class StringResource : Serializable {
      * @return string
      */
     fun getString(context: Context?): String? {
+        StringResourcesLogger.logM { "Creating string from $this" }
         return when (this) {
             is StringIdResource -> getStringIdResourceString(this, context)
             is StringValueResource -> getStringValueResourceString(this, context)
@@ -129,7 +127,14 @@ sealed class StringResource : Serializable {
         }
     }
 
+    /**
+     * Get annotated string
+     *
+     * @param context required for getting string by Id
+     * @return annotatedString
+     */
     fun getAnnotatedString(context: Context?): AnnotatedString? {
+        StringResourcesLogger.logM { "Creating annotated string from $this" }
         return when (this) {
             is StringAnnotatedStringResource -> this.annotatedString
             is StringIdResource -> getString(context)?.let { AnnotatedString(it) }
@@ -141,7 +146,7 @@ sealed class StringResource : Serializable {
         return try {
             stringAnnotatedStringResource.annotatedString.text
         } catch (t: Throwable) {
-            Logs.dt { t }
+            StringResourcesLogger.logT { t }
             null
         }
     }
@@ -157,7 +162,7 @@ sealed class StringResource : Serializable {
                 @Suppress("SpreadOperator")
                 String.format(stringValueResource.string.toString(), *fixedParams)
             } catch (t: Throwable) {
-                Logs.dt { t }
+                StringResourcesLogger.logT { t }
                 stringValueResource.string
             }
         }
@@ -180,14 +185,14 @@ sealed class StringResource : Serializable {
             try {
                 context.getString(resId)
             } catch (t: Throwable) {
-                Logs.dt { t }
+                StringResourcesLogger.logT { t }
                 null
             }
         } else {
             try {
                 context.getString(resId, formatArgs)
             } catch (t: Throwable) {
-                Logs.dt { t }
+                StringResourcesLogger.logT { t }
                 getStringSafely(context, resId)
             }
         }

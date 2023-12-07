@@ -18,3 +18,6 @@ StringResource.StringValueResource("Hello %s", "world").getString(null)
 
 **Passing context**
 Context is required to get the string from resources. Its required for StringIdResource. If you pass arguments as a type of StringIdResource, it is required also for StringValueResource.
+
+**Debugging**
+If you need to enable debugging and log everything that happens, use `StringResourcesLogger` to enable debug mode.

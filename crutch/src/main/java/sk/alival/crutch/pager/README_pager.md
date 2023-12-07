@@ -57,8 +57,8 @@ override `pageSize` and define your own page size.
 override `itemOffsetBeforeNextPage` and define your own offset. Offset means, which item index will trigger the getPage call for next page.
 Ideally it could be like 5 so your 5th item from the end will trigger new page.
 
-**Logging**
-override `isLogsEnabled` to enable debug logs.
+**Debugging**
+If you need to enable debugging and log everything that happens, use `PagerLogger` to enable debug mode.
 
 **Swipe to refresh**
 Calling `onSwipeToRefresh` will call getPage for page 1. If its success, it will clear other items. If it fails, it will just emit error and keep the existing items.

@@ -4,6 +4,7 @@ import android.util.Log
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.mockkStatic
+import java.util.concurrent.atomic.AtomicBoolean
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
@@ -75,7 +76,7 @@ class CacheableDataTests {
                     println("$tag: $message $t")
                 }
             })
-            CacheableDataLogger.setCacheableDataLoggerEnabled(true)
+            CacheableDataLogger.isCacheableDataDebugModeEnabled = AtomicBoolean(true)
         }
     }
 

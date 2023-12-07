@@ -67,3 +67,6 @@ You can use some of the extension methods to get the values or create your own.
     CacheableResultWrapper.getSuccessOrNull()
     CacheableResultWrapper.getSuccessDataOrThrow()
 ```
+
+### Debugging and logging
+If you need to enable debugging and log everything that happens, use `CacheableDataLogger` to enable debug mode.

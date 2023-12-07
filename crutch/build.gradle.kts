@@ -92,6 +92,7 @@ dependencies {
     implementation(libs.compose.ui.tooling)
     implementation(libs.compose.foundation)
     implementation(libs.compose.material)
+    implementation(libs.compose.lifecycle)
 
     // Logging
     implementation(libs.timber)
@@ -104,4 +105,5 @@ dependencies {
     testRuntimeOnly(libs.junit5.jupiter.engine)
     testRuntimeOnly(libs.junit5.vitage.engine)
     testImplementation(libs.coroutine.tests)
+    testImplementation(libs.turbine)
 }

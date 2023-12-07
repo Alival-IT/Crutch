@@ -1,8 +1,6 @@
 package sk.alival.crutch.cacheable
 
-import sk.alival.crutch.cacheable.CacheableDataLogger.log
-import sk.alival.crutch.logging.Logs
-import sk.alival.crutch.logging.dm
+import sk.alival.crutch.logging.getNameForLogs
 
 /**
  * Helper method to create prefs cache
@@ -13,7 +11,7 @@ import sk.alival.crutch.logging.dm
  * @return [CacheableData] wrapping the new call
  */
 inline fun <reified T : Any> CacheableDataCache.createCacheableData(uniqueCacheKey: CacheableUniqueCacheKey, noinline newDataGetter: suspend () -> T): CacheableData<T> {
-    CacheableDataLogger.log { Logs.dm { "Creating CacheableData for ${T::class.java.simpleName} with key $uniqueCacheKey" } }
+    CacheableDataLogger.log { "Creating CacheableData for ${T::class.java.getNameForLogs()} with key $uniqueCacheKey" }
     return CacheableDataImpl(
         this,
         T::class,
