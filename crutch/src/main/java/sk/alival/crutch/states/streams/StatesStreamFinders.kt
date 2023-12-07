@@ -15,14 +15,14 @@ import sk.alival.crutch.states.onetimeEvents.StatesOneTimeEvents
  */
 inline fun <reified T : Any> States<*>.findViewStateStreamByType(): StatesStateStream<T>? {
     return (
-            this.dataFlows.toList()
+            this.statesStreamsContainer.dataFlows.toList()
                 .firstOrNull {
                     it.first.java.isAssignableFrom(T::class.java) || it.first == T::class
                 }?.second as? StatesStateStream<T>?
             )
         .also { stream ->
             if (stream == null) {
-                StatesLogger.log { "ViewStateStream for type ${T::class.java.getNameForLogs()} not found\nRegistered: ${this.dataFlows.mapNotNull { it.key.getNameForLogs() }.joinToString(separator = "\n")}" }
+                StatesLogger.log { "ViewStateStream for type ${T::class.java.getNameForLogs()} not found\nRegistered: ${this.statesStreamsContainer.dataFlows.mapNotNull { it.key.getNameForLogs() }.joinToString(separator = "\n")}" }
             } else {
                 StatesLogger.log { "ViewStateStream found for type ${T::class.java.getNameForLogs()}" }
             }
@@ -37,14 +37,14 @@ inline fun <reified T : Any> States<*>.findViewStateStreamByType(): StatesStateS
  */
 inline fun <reified T : StatesOneTimeEvents> States<*>.findEventByType(): StatesEventStream<T>? {
     return (
-            this.oneTimeEvents.toList()
+            this.statesStreamsContainer.oneTimeEvents.toList()
                 .firstOrNull {
                     it.first.java.isAssignableFrom(T::class.java) || it.first == T::class
                 }?.second as? StatesEventStream<T>?
             )
         .also { stream ->
             if (stream == null) {
-                StatesLogger.log { "EventStream for type ${T::class.java.getNameForLogs()} not found\nRegistered: ${this.oneTimeEvents.mapNotNull { it.key.getNameForLogs() }.joinToString(separator = "\n")}" }
+                StatesLogger.log { "EventStream for type ${T::class.java.getNameForLogs()} not found\nRegistered: ${this.statesStreamsContainer.oneTimeEvents.mapNotNull { it.key.getNameForLogs() }.joinToString(separator = "\n")}" }
             } else {
                 StatesLogger.log { "EventStream found for type ${T::class.java.getNameForLogs()}" }
             }

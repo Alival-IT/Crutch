@@ -105,4 +105,5 @@ dependencies {
     testRuntimeOnly(libs.junit5.jupiter.engine)
     testRuntimeOnly(libs.junit5.vitage.engine)
     testImplementation(libs.coroutine.tests)
+    testImplementation(libs.turbine)
 }

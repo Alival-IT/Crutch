@@ -28,7 +28,7 @@ object StatesTestManager {
      */
     fun States<*>.wrapForTest(job: suspend (CoroutineScope) -> Unit, originalJob: Job): Job {
         return if (isRunningInTests) {
-            getCoroutineScope().launchMain {
+            statesStreamsContainer.scope.launchMain {
                 job(this)
             }
         } else {

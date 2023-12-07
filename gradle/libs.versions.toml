@@ -23,6 +23,7 @@ junit5 = "5.8.2"
 buildtools = "33.0.0"
 coroutine_tests = "1.7.3"
 compose_lifecycle = "2.6.2"
+turbine = "1.0.0"
 
 [libraries]
 junit5_jupiter_engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
@@ -49,6 +50,7 @@ agp = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 kgp = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 coroutine_tests = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutine_tests" }
 compose_lifecycle = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "compose_lifecycle" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 [plugins]
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }

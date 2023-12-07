@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.repeatOnLifecycle
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import sk.alival.crutch.states.States
@@ -57,7 +58,7 @@ inline fun <reified T : Any> States<T>.observeViewState(): T {
  */
 @Composable
 inline fun <reified T : Any> States<T>.observeViewStateAsState(): State<T> {
-    return (this.findViewStateStreamByType<T>()?.stream ?: MutableStateFlow(this.getInitialViewState()))
+    return (this.findViewStateStreamByType<T>()?.stream ?: MutableStateFlow(null).filterNotNull() as MutableStateFlow)
         .let { it.collectAsStateWithLifecycle(it.value) }
 }
 
@@ -69,7 +70,7 @@ inline fun <reified T : Any> States<T>.observeViewStateAsState(): State<T> {
  */
 @Composable
 inline fun <reified T : Any> States<*>.observeViewStateWithType(): T {
-    return (this.findViewStateStreamByType<T>()?.stream ?: MutableStateFlow(this.getInitialViewState() as T))
+    return (this.findViewStateStreamByType<T>()?.stream ?: MutableStateFlow(null).filterNotNull() as MutableStateFlow)
         .let { it.collectAsStateWithLifecycle(it.value).value }
 }
 
@@ -81,6 +82,6 @@ inline fun <reified T : Any> States<*>.observeViewStateWithType(): T {
  */
 @Composable
 inline fun <reified T : Any> States<*>.observeViewStateAsStateWithType(): State<T> {
-    return (this.findViewStateStreamByType<T>()?.stream ?: MutableStateFlow(this.getInitialViewState() as T))
+    return (this.findViewStateStreamByType<T>()?.stream ?: MutableStateFlow(null).filterNotNull() as MutableStateFlow)
         .collectAsStateWithLifecycle()
 }

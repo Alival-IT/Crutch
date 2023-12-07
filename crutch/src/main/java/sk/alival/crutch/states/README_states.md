@@ -14,8 +14,9 @@ sealed class ExampleEvents : StatesOneTimeEvents {
 data class ExampleViewState(val state: String)
 
 class ExampleViewModel : StatesViewModel<ExampleViewState>(ExampleViewState("example")) {
-    override fun registerStates() {
-        super.registerStates() // this automatically registers default viewState
+    
+    init {
+        // You should register your states and events in init{} block. Default state is automatically registered for StatesViewModel only. 
         registerCustomEvent<ExampleEvents>()
     }
 
@@ -40,17 +41,13 @@ sealed class ExampleEvents : StatesOneTimeEvents {
 data class ExampleViewState(val state: String)
 
 class ExampleScreenModel : States<ExampleViewState> {
-    override fun getCoroutineScope(): CoroutineScope {
-        // provide your coroutine scope which will be used by states to operate on
-    }
 
-    override fun getInitialViewState(): ExampleViewState {
-        return ExampleViewState("example")
-    }
-
-    override fun registerStates() {
-        // you have to manually register default viewState
-        registerCustomViewState(getInitialViewState())
+    // you have to provide StatesStreamsContainer with a scope States operates on
+    override val statesStreamsContainer: StatesStreamsContainer = StatesStreamsContainer(scope)
+    
+    init { 
+        // you have to manually register states and events, also default viewState
+        registerCustomViewState(ExampleViewState("Example"))
         registerCustomEvent<ExampleEvents>()
     }
 
@@ -112,7 +109,8 @@ launchOnMainImmediate**.
 States are based on a map of streams and types. Each type that is registered with
 `registerCustomViewState` or `registerCustomEvent` is stored
 as a pair of KClass to Stream and can be observed by its type.
-You can register multiple states and events.
+You can register multiple states and events. For StatesViewModel, default viewState is automatically registered.
+For States, you have to manually register every state and event, even the default one.
 
 ### Testing
 

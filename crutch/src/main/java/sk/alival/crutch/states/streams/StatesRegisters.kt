@@ -15,7 +15,7 @@ import sk.alival.crutch.states.onetimeEvents.StatesOneTimeEvents
  */
 fun States<*>.registerCustomViewState(initialData: Any) {
     StatesLogger.log { "Registering data flow for type: ${initialData::class.java.getNameForLogs()}, in: ${this::class.java.getNameForLogs()}" }
-    dataFlows[initialData::class] = StatesStateStream(MutableStateFlow(initialData), Mutex())
+    statesStreamsContainer.dataFlows[initialData::class] = StatesStateStream(MutableStateFlow(initialData), Mutex())
 }
 
 /**
@@ -25,5 +25,5 @@ fun States<*>.registerCustomViewState(initialData: Any) {
  */
 inline fun <reified T : StatesOneTimeEvents> States<*>.registerCustomEvent() {
     StatesLogger.log { "Registering one time event for type: ${T::class.java.getNameForLogs()} in  ${this::class.java.getNameForLogs()}" }
-    oneTimeEvents[T::class] = StatesEventStream(Channel(capacity = 1), Mutex())
+    statesStreamsContainer.oneTimeEvents[T::class] = StatesEventStream(Channel(capacity = 1), Mutex())
 }

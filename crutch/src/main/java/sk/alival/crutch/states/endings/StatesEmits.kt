@@ -59,7 +59,7 @@ suspend inline fun <reified T : Any> States<*>.emitViewStateWithType(crossinline
                 }
             }
         }
-    } ?: StatesLogger.log { "Skipping emitted state, stream type not found for ${T::class.java.getNameForLogs()}:\nregistered:${dataFlows}\n${T::class.getNameForLogs()}}" }
+    } ?: StatesLogger.log { "Skipping emitted state, stream type not found for ${T::class.java.getNameForLogs()}:\nregistered:${statesStreamsContainer.dataFlows}\n${T::class.getNameForLogs()}}" }
 }
 
 /**
@@ -89,5 +89,5 @@ suspend inline fun <reified T : StatesOneTimeEvents> States<*>.emitEvent(event: 
                 withMainImmediate(block = block)
             }
         }
-    } ?: StatesLogger.log { "Skipping one time event, stream type not found fir type ${T::class.java.getNameForLogs()}:\nregistered:$oneTimeEvents\nemitting:${T::class.getNameForLogs()}" }
+    } ?: StatesLogger.log { "Skipping one time event, stream type not found fir type ${T::class.java.getNameForLogs()}:\nregistered:${statesStreamsContainer.oneTimeEvents}\nemitting:${T::class.getNameForLogs()}" }
 }

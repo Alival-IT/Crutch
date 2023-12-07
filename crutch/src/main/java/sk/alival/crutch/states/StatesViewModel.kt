@@ -2,7 +2,7 @@ package sk.alival.crutch.states
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.CoroutineScope
+import sk.alival.crutch.states.streams.StatesStreamsContainer
 import sk.alival.crutch.states.streams.registerCustomViewState
 
 /**
@@ -16,14 +16,9 @@ abstract class StatesViewModel<VIEWSTATE : Any>(
     private val initialState: VIEWSTATE
 ) : ViewModel(), States<VIEWSTATE> {
 
-    override fun getInitialViewState(): VIEWSTATE = initialState
+    final override val statesStreamsContainer: StatesStreamsContainer = StatesStreamsContainer(viewModelScope)
 
-    override fun getCoroutineScope(): CoroutineScope = viewModelScope
-
-    /**
-     * Automatically registers the initialState
-     */
-    override fun registerStates() {
-        registerCustomViewState(getInitialViewState())
+    init {
+        registerCustomViewState(initialState)
     }
 }

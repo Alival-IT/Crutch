@@ -15,7 +15,7 @@ import sk.alival.crutch.states.tests.StatesTestManager.wrapForTest
 fun States<*>.launchOnIo(job: suspend (CoroutineScope) -> Unit): Job {
     return wrapForTest(
         job,
-        getCoroutineScope().launchIO {
+        statesStreamsContainer.scope.launchIO {
             job(this)
         }
     )
@@ -31,7 +31,7 @@ fun States<*>.launchOnIo(job: suspend (CoroutineScope) -> Unit): Job {
 fun States<*>.launchOnDefault(job: suspend (CoroutineScope) -> Unit): Job {
     return wrapForTest(
         job,
-        getCoroutineScope().launchDefault {
+        statesStreamsContainer.scope.launchDefault {
             job(this)
         }
     )
@@ -50,7 +50,7 @@ fun States<*>.launchOnDefault(job: suspend (CoroutineScope) -> Unit): Job {
 fun States<*>.launchOnUnconfined(job: suspend (CoroutineScope) -> Unit): Job {
     return wrapForTest(
         job,
-        getCoroutineScope().launchUnconfined {
+        statesStreamsContainer.scope.launchUnconfined {
             job(this)
         }
     )
@@ -66,7 +66,7 @@ fun States<*>.launchOnUnconfined(job: suspend (CoroutineScope) -> Unit): Job {
 fun States<*>.launchOnMain(job: suspend (CoroutineScope) -> Unit): Job {
     return wrapForTest(
         job,
-        getCoroutineScope().launchMain {
+        statesStreamsContainer.scope.launchMain {
             job(this)
         }
     )
@@ -82,7 +82,7 @@ fun States<*>.launchOnMain(job: suspend (CoroutineScope) -> Unit): Job {
 fun States<*>.launchOnMainImmediate(job: suspend (CoroutineScope) -> Unit): Job {
     return wrapForTest(
         job,
-        getCoroutineScope().launchMainImmediate {
+        statesStreamsContainer.scope.launchMainImmediate {
             job(this)
         }
     )
