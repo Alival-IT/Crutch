@@ -24,6 +24,7 @@ buildtools = "33.0.0"
 coroutine_tests = "1.7.3"
 compose_lifecycle = "2.6.2"
 turbine = "1.0.0"
+kover = "0.7.5"
 
 [libraries]
 junit5_jupiter_engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
@@ -56,3 +57,4 @@ turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint.gradle" }
 versions = { id = "com.github.ben-manes.versions", version.ref = "benmanesversion" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
