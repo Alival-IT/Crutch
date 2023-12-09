@@ -4,6 +4,7 @@ plugins {
     id("maven-publish")
     publish
     jacoco
+    alias(libs.plugins.kover)
 }
 
 android {

@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.versions)
     base
     jacoco
+    alias(libs.plugins.kover)
 }
 
 allprojects {
