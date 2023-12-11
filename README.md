@@ -6,6 +6,17 @@
 
 Android library with some common used features within my projects
 
+```
+// mandatory
+implementation("com.github.Alival-IT.Crutch:crutch_core:v<VERSION>")
+
+//optional
+implementation("com.github.Alival-IT.Crutch:crutch_pager:v<VERSION>")
+implementation("com.github.Alival-IT.Crutch:crutch_states:v<VERSION>")
+implementation("com.github.Alival-IT.Crutch:crutch_cacheable:v<VERSION>")
+implementation("com.github.Alival-IT.Crutch:crutch_stringresources:v<VERSION>")
+```
+
 # Modules
 
 [States](https://github.com/Alival-IT/Crutch/blob/main/crutch_states/src/main/java/sk/alival/crutch/states/README_states.md)
