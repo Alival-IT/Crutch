@@ -12,8 +12,7 @@ plugins {
 }
 
 allprojects {
-    group = CrutchConfigCommon.CRUTCH_GROUP_ID
-    version = CrutchConfigCommon.CRUTCH_VERSION_NAME
+    group = PUBLISHING_GROUP
 }
 
 val detektFormatting = libs.detekt.formatting

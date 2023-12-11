@@ -2,6 +2,7 @@ plugins {
     id("com.android.library")
     kotlin("android")
     id("maven-publish")
+    publish
     jacoco
     alias(libs.plugins.kover)
 }
