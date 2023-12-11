@@ -22,4 +22,5 @@ include(
     "crutch",
     "crutch_states",
     "crutch_cacheable",
+    "crutch_pager",
 )

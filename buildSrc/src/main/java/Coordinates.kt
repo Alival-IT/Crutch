@@ -21,3 +21,7 @@ object CrutchConfigStates {
 object CrutchConfigCacheable {
     const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "crutch_cacheable"
 }
+
+object CrutchConfigPager {
+    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "crutch_pager"
+}

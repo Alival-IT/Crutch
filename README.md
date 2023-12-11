@@ -16,4 +16,4 @@ Android library with some common used features within my projects
 
 [StringResources](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/stringResources/README_stringResources.md)
 
-[Pager](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/pager/README_pager.md)
+[Pager](https://github.com/Alival-IT/Crutch/blob/main/crutch_pager/src/main/java/sk/alival/crutch/pager/README_pager.md)
