@@ -68,7 +68,7 @@ android {
 afterEvaluate {
     publishing {
         publications {
-            (components.findByName("release") as? MavenPublication?)?.let {
+            (this.findByName("release") as? MavenPublication?)?.let {
                 it.groupId = CrutchConfigCore.CRUTCH_GROUP_ID
                 it.artifactId = CrutchConfigCore.CRUTCH_ARTIFACT_ID
                 it.version = CrutchConfigCore.CRUTCH_VERSION_NAME

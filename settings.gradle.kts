@@ -20,5 +20,5 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 include(
     "app",
     "crutch",
-    "crutch-states"
+    "crutch_states"
 )

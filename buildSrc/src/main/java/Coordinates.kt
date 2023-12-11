@@ -1,5 +1,3 @@
-const val PUBLISHING_GROUP = "sk.alival.crutch"
-
 object AppCoordinates {
     const val APP_ID = "sk.alival.crutchTestApp"
     const val APP_VERSION_NAME = "1.0.0"
@@ -9,11 +7,11 @@ object AppCoordinates {
 object CrutchConfigCommon {
     const val CRUTCH_ID = "sk.alival.crutch"
     const val CRUTCH_GROUP_ID = "sk.alival"
-    const val CRUTCH_VERSION_NAME = "0.0.5-alpha1"
+    const val CRUTCH_VERSION_NAME = "0.0.5-alpha2"
 }
 
 object CrutchConfigCore {
-    const val CRUTCH_ARTIFACT_ID = "crutch_core"
+    const val CRUTCH_ARTIFACT_ID = "crutch"
     const val CRUTCH_GROUP_ID = CrutchConfigCommon.CRUTCH_GROUP_ID
     const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + CRUTCH_ARTIFACT_ID
     const val CRUTCH_VERSION_NAME = CrutchConfigCommon.CRUTCH_VERSION_NAME
