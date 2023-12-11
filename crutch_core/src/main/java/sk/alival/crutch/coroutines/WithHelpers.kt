@@ -1,4 +1,4 @@
-package sk.alival.crutch.states.coroutineHelpers
+package sk.alival.crutch.coroutines
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

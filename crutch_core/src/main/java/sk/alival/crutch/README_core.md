@@ -39,3 +39,25 @@ Logs.init(
 	}  
 )
 ```
+
+# Core
+
+**Launcher as extensions for CoroutineScope**
+
+```kotlin
+launchIO
+launchDefault
+launchMain
+launchMainImmediate
+launchUnconfined
+```
+
+**Context switchers**
+
+```kotlin
+withMainImmediate
+withIO
+withDefault
+withMain
+withUnconfined
+```

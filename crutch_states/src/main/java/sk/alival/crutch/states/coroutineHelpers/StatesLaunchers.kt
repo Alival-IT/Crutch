@@ -2,6 +2,11 @@ package sk.alival.crutch.states.coroutineHelpers
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import sk.alival.crutch.coroutines.launchDefault
+import sk.alival.crutch.coroutines.launchIO
+import sk.alival.crutch.coroutines.launchMain
+import sk.alival.crutch.coroutines.launchMainImmediate
+import sk.alival.crutch.coroutines.launchUnconfined
 import sk.alival.crutch.states.States
 import sk.alival.crutch.states.tests.StatesTestManager.wrapForTest
 
