@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.tooling.core.closure
+
 plugins {
     id("com.android.library")
     kotlin("android")
@@ -6,12 +8,12 @@ plugins {
     alias(libs.plugins.kover)
 }
 
-group = CrutchConfigCore.CRUTCH_GROUP_ID
-version = CrutchConfigCore.CRUTCH_VERSION_NAME
+group = CrutchConfigStates.CRUTCH_GROUP_ID
+version = CrutchConfigStates.CRUTCH_VERSION_NAME
 
 android {
     compileSdk = libs.versions.compile.sdk.version.get().toInt()
-    namespace = CrutchConfigCore.CRUTCH_LIB_ID
+    namespace = CrutchConfigStates.CRUTCH_LIB_ID
 
     defaultConfig {
         minSdk = libs.versions.min.sdk.version.get().toInt()
@@ -56,7 +58,6 @@ android {
             consumerProguardFiles("consumer-rules.pro")
         }
     }
-
     publishing {
         singleVariant("release") {
             withSourcesJar()
@@ -69,9 +70,9 @@ afterEvaluate {
     publishing {
         publications {
             (components.findByName("release") as? MavenPublication?)?.let {
-                it.groupId = CrutchConfigCore.CRUTCH_GROUP_ID
-                it.artifactId = CrutchConfigCore.CRUTCH_ARTIFACT_ID
-                it.version = CrutchConfigCore.CRUTCH_VERSION_NAME
+                it.groupId = CrutchConfigStates.CRUTCH_GROUP_ID
+                it.artifactId = CrutchConfigStates.CRUTCH_ARTIFACT_ID
+                it.version = CrutchConfigStates.CRUTCH_VERSION_NAME
             }
         }
     }
@@ -96,6 +97,7 @@ jacoco {
 }
 
 dependencies {
+    implementation(projects.crutch)
     // Androidx
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
