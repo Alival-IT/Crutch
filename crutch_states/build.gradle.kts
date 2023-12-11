@@ -9,7 +9,7 @@ plugins {
 
 android {
     compileSdk = libs.versions.compile.sdk.version.get().toInt()
-    namespace = CrutchConfigCore.CRUTCH_LIB_ID
+    namespace = CrutchConfigStates.CRUTCH_LIB_ID
 
     defaultConfig {
         minSdk = libs.versions.min.sdk.version.get().toInt()
@@ -54,7 +54,6 @@ android {
             consumerProguardFiles("consumer-rules.pro")
         }
     }
-
     publishing {
         singleVariant("release") {
             withSourcesJar()
@@ -82,6 +81,7 @@ jacoco {
 }
 
 dependencies {
+    implementation(projects.crutch)
     // Androidx
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
