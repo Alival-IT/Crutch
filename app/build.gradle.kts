@@ -45,6 +45,7 @@ android {
 dependencies {
     implementation(projects.crutch)
     implementation(projects.crutchStates)
+    implementation(projects.crutchCacheable)
 
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.constraint.layout)

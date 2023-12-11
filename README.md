@@ -8,9 +8,9 @@ Android library with some common used features within my projects
 
 # Features
 
-[States](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/states/README_states.md)
+[States](https://github.com/Alival-IT/Crutch/blob/main/crutch_states/src/main/java/sk/alival/crutch/states/README_states.md)
 
-[Cacheable](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/cacheable/README_cacheable.md)
+[Cacheable](https://github.com/Alival-IT/Crutch/blob/main/crutch_cacheable/src/main/java/sk/alival/crutch/cacheable/README_cacheable.md)
 
 [Logs](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/logging/README_logging.md)
 

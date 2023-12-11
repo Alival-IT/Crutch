@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
-import sk.alival.crutch.cacheable.CacheableDataLogger
 import sk.alival.crutch.logging.CustomLogs
 import sk.alival.crutch.logging.Logs
 
@@ -98,7 +97,7 @@ class PagerTests {
                     println("$tag: $message $t")
                 }
             })
-            CacheableDataLogger.isCacheableDataDebugModeEnabled = AtomicBoolean(true)
+            PagerLogger.isPagerDebugModeEnabled = AtomicBoolean(true)
             val testDispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
             Dispatchers.setMain(testDispatcher)
         }
