@@ -19,6 +19,9 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 include(
     "app",
-    "crutch",
-    "crutch_states"
+    "crutch_core",
+    "crutch_states",
+    "crutch_cacheable",
+    "crutch_pager",
+    "crutch_stringresources",
 )

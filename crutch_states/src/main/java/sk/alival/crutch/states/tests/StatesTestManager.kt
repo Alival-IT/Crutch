@@ -3,7 +3,7 @@ package sk.alival.crutch.states.tests
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import sk.alival.crutch.states.States
-import sk.alival.crutch.states.coroutineHelpers.launchMain
+import sk.alival.crutch.coroutines.launchMain
 
 /**
  * States test helper

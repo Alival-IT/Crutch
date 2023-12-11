@@ -4,8 +4,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.sync.withLock
 import sk.alival.crutch.states.States
-import sk.alival.crutch.states.coroutineHelpers.withMain
-import sk.alival.crutch.states.coroutineHelpers.withMainImmediate
+import sk.alival.crutch.coroutines.withMain
+import sk.alival.crutch.coroutines.withMainImmediate
 import sk.alival.crutch.states.logging.StatesLogger
 import sk.alival.crutch.logging.getNameForLogs
 import sk.alival.crutch.states.onetimeEvents.StatesOneTimeEvents

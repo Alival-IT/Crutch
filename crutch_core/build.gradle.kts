@@ -9,7 +9,7 @@ plugins {
 
 android {
     compileSdk = libs.versions.compile.sdk.version.get().toInt()
-    namespace = CrutchConfigStates.CRUTCH_LIB_ID
+    namespace = CrutchConfigCore.CRUTCH_LIB_ID
 
     defaultConfig {
         minSdk = libs.versions.min.sdk.version.get().toInt()
@@ -54,6 +54,7 @@ android {
             consumerProguardFiles("consumer-rules.pro")
         }
     }
+
     publishing {
         singleVariant("release") {
             withSourcesJar()
@@ -81,8 +82,6 @@ jacoco {
 }
 
 dependencies {
-    implementation(projects.crutchCore)
-
     // Androidx
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core.ktx)
@@ -107,4 +106,24 @@ dependencies {
     testRuntimeOnly(libs.junit5.vitage.engine)
     testImplementation(libs.coroutine.tests)
     testImplementation(libs.turbine)
+
+    // Kover
+    kover(projects.crutchCacheable)
+    kover(projects.crutchPager)
+    kover(projects.crutchStates)
+    kover(projects.crutchStringresources)
+}
+
+koverReport{
+    filters {
+        excludes {
+            classes(
+                "*ScopeHelpers*",
+                "*WithHelpers*",
+                "*LoggerExtensions*",
+                "*StatesLaunchers*",
+                "*.tests.*",
+            )
+        }
+    }
 }

@@ -8,19 +8,24 @@ object AppCoordinates {
 
 object CrutchConfigCommon {
     const val CRUTCH_GROUP_ID = "sk.alival.crutch"
-    const val CRUTCH_VERSION_NAME = "0.0.5-alpha5"
 }
 
 object CrutchConfigCore {
-    const val CRUTCH_ARTIFACT_ID = "crutch"
-    const val CRUTCH_GROUP_ID = CrutchConfigCommon.CRUTCH_GROUP_ID
-    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + CRUTCH_ARTIFACT_ID
-    const val CRUTCH_VERSION_NAME = CrutchConfigCommon.CRUTCH_VERSION_NAME
+    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "crutch_core"
 }
 
 object CrutchConfigStates {
-    const val CRUTCH_ARTIFACT_ID = "crutch_states"
-    const val CRUTCH_GROUP_ID = CrutchConfigCommon.CRUTCH_GROUP_ID
-    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + CRUTCH_ARTIFACT_ID
-    const val CRUTCH_VERSION_NAME = CrutchConfigCommon.CRUTCH_VERSION_NAME
+    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "crutch_states"
+}
+
+object CrutchConfigCacheable {
+    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "crutch_cacheable"
+}
+
+object CrutchConfigPager {
+    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "crutch_pager"
+}
+
+object CrutchConfigStringResources {
+    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "crutch_stringresources"
 }
