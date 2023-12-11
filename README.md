@@ -20,4 +20,4 @@ Android library with some common used features within my projects
 
 Core also includes Logs module.
 
-[Core](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/logging/README_core.md)
+[Core](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/README_core.md)
