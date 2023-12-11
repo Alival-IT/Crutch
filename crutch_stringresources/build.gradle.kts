@@ -9,7 +9,7 @@ plugins {
 
 android {
     compileSdk = libs.versions.compile.sdk.version.get().toInt()
-    namespace = CrutchConfigCacheable.CRUTCH_LIB_ID
+    namespace = CrutchConfigStringResources.CRUTCH_LIB_ID
 
     defaultConfig {
         minSdk = libs.versions.min.sdk.version.get().toInt()

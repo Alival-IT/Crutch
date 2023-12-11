@@ -6,14 +6,16 @@
 
 Android library with some common used features within my projects
 
-# Features
+# Modules
 
 [States](https://github.com/Alival-IT/Crutch/blob/main/crutch_states/src/main/java/sk/alival/crutch/states/README_states.md)
 
 [Cacheable](https://github.com/Alival-IT/Crutch/blob/main/crutch_cacheable/src/main/java/sk/alival/crutch/cacheable/README_cacheable.md)
 
-[Logs](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/logging/README_logging.md)
-
-[StringResources](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/stringResources/README_stringResources.md)
+[StringResources](https://github.com/Alival-IT/Crutch/blob/main/crutch_stringresources/src/main/java/sk/alival/crutch/stringResources/README_stringResources.md)
 
 [Pager](https://github.com/Alival-IT/Crutch/blob/main/crutch_pager/src/main/java/sk/alival/crutch/pager/README_pager.md)
+
+## Core
+
+[Logs](https://github.com/Alival-IT/Crutch/blob/main/crutch/src/main/java/sk/alival/crutch/logging/README_logging.md)
