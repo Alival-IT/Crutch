@@ -6,9 +6,6 @@ plugins {
     alias(libs.plugins.kover)
 }
 
-group = CrutchConfigCore.CRUTCH_GROUP_ID
-version = CrutchConfigCore.CRUTCH_VERSION_NAME
-
 android {
     compileSdk = libs.versions.compile.sdk.version.get().toInt()
     namespace = CrutchConfigCore.CRUTCH_LIB_ID
