@@ -106,4 +106,10 @@ dependencies {
     testRuntimeOnly(libs.junit5.vitage.engine)
     testImplementation(libs.coroutine.tests)
     testImplementation(libs.turbine)
+
+    // Kover
+    kover(projects.crutchCacheable)
+    kover(projects.crutchPager)
+    kover(projects.crutchStates)
+    kover(projects.crutchStringresources)
 }
