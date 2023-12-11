@@ -113,3 +113,17 @@ dependencies {
     kover(projects.crutchStates)
     kover(projects.crutchStringresources)
 }
+
+koverReport{
+    filters {
+        excludes {
+            classes(
+                "*ScopeHelpers*",
+                "*WithHelpers*",
+                "*LoggerExtensions*",
+                "*StatesLaunchers*",
+                "*.tests.*",
+            )
+        }
+    }
+}

@@ -65,6 +65,18 @@ class LogsTests {
         verify(exactly = numberOfInvocations) {
             customLogs.dm(any(), any())
         }
+
+        val l5 = Logs.wm { "" }
+        assertEquals(Logs, l5)
+        verify(exactly = numberOfInvocations) {
+            customLogs.wm(any(), any())
+        }
+
+        val l6 = Logs.wt { exception }
+        assertEquals(Logs, l6)
+        verify(exactly = numberOfInvocations) {
+            customLogs.wt(any(), any())
+        }
     }
 
     private fun verifyDefaultLogsWithoutInit() {
@@ -195,6 +207,8 @@ class LogsTests {
         val mockedCustomLogs = mockk<CustomLogs>()
         Logs.init(true, mockedCustomLogs)
 
+        // messages
+
         if (useTag) {
             Logs.dm("dmTag") { "dmMessage" }
             verify(exactly = 1) {
@@ -204,6 +218,30 @@ class LogsTests {
             Logs.dm { "dmMessage" }
             verify(exactly = 1) {
                 mockedCustomLogs.log(any(), any(), "dmMessage", any())
+            }
+        }
+
+        if (useTag) {
+            Logs.em("emTag") { "emMessage" }
+            verify(exactly = 1) {
+                mockedCustomLogs.log(any(), "emTag", "emMessage", any())
+            }
+        } else {
+            Logs.em { "emMessage" }
+            verify(exactly = 1) {
+                mockedCustomLogs.log(any(), any(), "emMessage", any())
+            }
+        }
+
+        if (useTag) {
+            Logs.wm("wmTag") { "wmMessage" }
+            verify(exactly = 1) {
+                mockedCustomLogs.log(any(), "wmTag", "wmMessage", any())
+            }
+        } else {
+            Logs.wm { "wmMessage" }
+            verify(exactly = 1) {
+                mockedCustomLogs.log(any(), any(), "wmMessage", any())
             }
         }
     }
