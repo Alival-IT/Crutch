@@ -65,18 +65,6 @@ android {
     }
 }
 
-afterEvaluate {
-    publishing {
-        publications {
-            (this.findByName("release") as? MavenPublication?)?.let {
-                it.groupId = CrutchConfigCore.CRUTCH_GROUP_ID
-                it.artifactId = CrutchConfigCore.CRUTCH_ARTIFACT_ID
-                it.version = CrutchConfigCore.CRUTCH_VERSION_NAME
-            }
-        }
-    }
-}
-
 tasks.withType(Test::class) {
     useJUnitPlatform()
 }
