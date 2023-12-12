@@ -42,6 +42,7 @@ class CacheableDataTests {
             if (throwCacheErrorForTesting) {
                 throw cacheThrowable
             } else {
+                @Suppress("UNCHECKED_CAST")
                 return cache[Pair(key.mainKey, key.subKey)] as? T?
             }
         }

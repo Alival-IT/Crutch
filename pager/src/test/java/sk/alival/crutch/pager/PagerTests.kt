@@ -10,8 +10,8 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -86,6 +86,7 @@ class PagerTests {
     }
 
     companion object {
+        @OptIn(ExperimentalCoroutinesApi::class)
         @JvmStatic
         @BeforeAll
         fun setup(): Unit {
@@ -98,7 +99,7 @@ class PagerTests {
                 }
             })
             PagerLogger.isPagerDebugModeEnabled = AtomicBoolean(true)
-            val testDispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
+            val testDispatcher = StandardTestDispatcher(TestCoroutineScheduler())
             Dispatchers.setMain(testDispatcher)
         }
     }
