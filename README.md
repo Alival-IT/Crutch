@@ -8,13 +8,13 @@ Android library with some common used features within my projects
 
 ```
 // mandatory
-implementation("com.github.Alival-IT.crutch:core:v<VERSION>")
+implementation("com.github.Alival-IT.crutch:core:<VERSION>")
 
 //optional
-implementation("com.github.Alival-IT.crutch:pager:v<VERSION>")
-implementation("com.github.Alival-IT.crutch:states:v<VERSION>")
-implementation("com.github.Alival-IT.crutch:cacheable:v<VERSION>")
-implementation("com.github.Alival-IT.crutch:stringresources:v<VERSION>")
+implementation("com.github.Alival-IT.crutch:pager:<VERSION>")
+implementation("com.github.Alival-IT.crutch:states:<VERSION>")
+implementation("com.github.Alival-IT.crutch:cacheable:<VERSION>")
+implementation("com.github.Alival-IT.crutch:stringresources:<VERSION>")
 ```
 
 # Modules
