@@ -122,6 +122,7 @@ koverReport{
                 "*WithHelpers*",
                 "*LoggerExtensions*",
                 "*StatesLaunchers*",
+                "*Logger*",
                 "*.tests.*",
             )
         }

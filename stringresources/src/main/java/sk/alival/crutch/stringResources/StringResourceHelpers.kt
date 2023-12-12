@@ -7,9 +7,9 @@ import androidx.compose.ui.text.AnnotatedString
 
 fun StringResource?.orEmpty(): StringResource = this ?: StringResource.EmptyStringResource()
 
-fun String?.toStringResource(vararg params: Any) = StringResource.StringValueResource(this, params)
+fun String?.toStringResource(vararg params: Any) = StringResource.StringValueResource(this, *params)
 
-fun Int.toStringResource(vararg params: Any) = StringResource.StringIdResource(this, params)
+fun Int.toStringResource(vararg params: Any) = StringResource.StringIdResource(this, *params)
 
 fun StringResource?.isEmpty(context: Context?): Boolean = this?.getString(context).isNullOrBlank()
 
