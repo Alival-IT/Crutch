@@ -11,21 +11,21 @@ object CrutchConfigCommon {
 }
 
 object CrutchConfigCore {
-    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "crutch_core"
+    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "core"
 }
 
 object CrutchConfigStates {
-    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "crutch_states"
+    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "states"
 }
 
 object CrutchConfigCacheable {
-    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "crutch_cacheable"
+    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "cacheable"
 }
 
 object CrutchConfigPager {
-    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "crutch_pager"
+    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "pager"
 }
 
 object CrutchConfigStringResources {
-    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "crutch_stringresources"
+    const val CRUTCH_LIB_ID = CrutchConfigCommon.CRUTCH_GROUP_ID + "." + "stringresources"
 }

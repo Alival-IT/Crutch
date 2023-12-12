@@ -82,7 +82,7 @@ jacoco {
 }
 
 dependencies {
-    implementation(projects.crutchCore)
+    implementation(projects.core)
 
     // Androidx
     implementation(libs.androidx.appcompat)

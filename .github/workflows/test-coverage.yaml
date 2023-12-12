@@ -29,13 +29,13 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: CodeCov
-        run: ./gradlew crutch_core:koverXmlReportRelease
+        run: ./gradlew core:koverXmlReportRelease
 
       - name: Read README.md
         id: package
         uses: jaywcjlove/github-action-read-file@main
         with:
-          path: ${{github.workspace}}/crutch_core/build/reports/kover/reportRelease.xml
+          path: ${{github.workspace}}/core/build/reports/kover/reportRelease.xml
 
       - name: Echo report
         run: echo "${{ steps.package.outputs.content }}"
@@ -43,7 +43,7 @@ jobs:
       - uses: codecov/codecov-action@v3
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ${{github.workspace}}/crutch_core/build/reports/kover/reportRelease.xml
+          files: ${{github.workspace}}/core/build/reports/kover/reportRelease.xml
           flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: true

@@ -1,3 +1,25 @@
+# Core
+
+**Launcher as extensions for CoroutineScope**
+
+```kotlin
+launchIO
+launchDefault
+launchMain
+launchMainImmediate
+launchUnconfined
+```
+
+**Context switchers**
+
+```kotlin
+withMainImmediate
+withIO
+withDefault
+withMain
+withUnconfined
+```
+
 # Logs
 Currently, just a wrapper over [Timber](https://github.com/JakeWharton/timber).
 
@@ -38,26 +60,4 @@ Logs.init(
 		}  
 	}  
 )
-```
-
-# Core
-
-**Launcher as extensions for CoroutineScope**
-
-```kotlin
-launchIO
-launchDefault
-launchMain
-launchMainImmediate
-launchUnconfined
-```
-
-**Context switchers**
-
-```kotlin
-withMainImmediate
-withIO
-withDefault
-withMain
-withUnconfined
 ```

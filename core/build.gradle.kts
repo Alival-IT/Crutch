@@ -108,10 +108,10 @@ dependencies {
     testImplementation(libs.turbine)
 
     // Kover
-    kover(projects.crutchCacheable)
-    kover(projects.crutchPager)
-    kover(projects.crutchStates)
-    kover(projects.crutchStringresources)
+    kover(projects.cacheable)
+    kover(projects.pager)
+    kover(projects.states)
+    kover(projects.stringresources)
 }
 
 koverReport{

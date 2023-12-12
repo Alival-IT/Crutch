@@ -8,27 +8,27 @@ Android library with some common used features within my projects
 
 ```
 // mandatory
-implementation("com.github.Alival-IT.Crutch:crutch_core:v<VERSION>")
+implementation("com.github.Alival-IT.crutch:core:v<VERSION>")
 
 //optional
-implementation("com.github.Alival-IT.Crutch:crutch_pager:v<VERSION>")
-implementation("com.github.Alival-IT.Crutch:crutch_states:v<VERSION>")
-implementation("com.github.Alival-IT.Crutch:crutch_cacheable:v<VERSION>")
-implementation("com.github.Alival-IT.Crutch:crutch_stringresources:v<VERSION>")
+implementation("com.github.Alival-IT.crutch:pager:v<VERSION>")
+implementation("com.github.Alival-IT.crutch:states:v<VERSION>")
+implementation("com.github.Alival-IT.crutch:cacheable:v<VERSION>")
+implementation("com.github.Alival-IT.crutch:stringresources:v<VERSION>")
 ```
 
 # Modules
 
-[States](https://github.com/Alival-IT/Crutch/blob/main/crutch_states/src/main/java/sk/alival/crutch/states/README_states.md)
+[States](https://github.com/Alival-IT/Crutch/blob/main/states/src/main/java/sk/alival/crutch/states/README_states.md)
 
-[Cacheable](https://github.com/Alival-IT/Crutch/blob/main/crutch_cacheable/src/main/java/sk/alival/crutch/cacheable/README_cacheable.md)
+[Cacheable](https://github.com/Alival-IT/Crutch/blob/main/cacheable/src/main/java/sk/alival/crutch/cacheable/README_cacheable.md)
 
-[StringResources](https://github.com/Alival-IT/Crutch/blob/main/crutch_stringresources/src/main/java/sk/alival/crutch/stringResources/README_stringResources.md)
+[StringResources](https://github.com/Alival-IT/Crutch/blob/main/stringresources/src/main/java/sk/alival/crutch/stringResources/README_stringResources.md)
 
-[Pager](https://github.com/Alival-IT/Crutch/blob/main/crutch_pager/src/main/java/sk/alival/crutch/pager/README_pager.md)
+[Pager](https://github.com/Alival-IT/Crutch/blob/main/pager/src/main/java/sk/alival/crutch/pager/README_pager.md)
 
 ## Core
 
 Core also includes Logs module.
 
-[Core](https://github.com/Alival-IT/Crutch/blob/main/crutch_core/src/main/java/sk/alival/crutch/README_core.md)
+[Core](https://github.com/Alival-IT/Crutch/blob/main/core/src/main/java/sk/alival/crutch/README_core.md)
