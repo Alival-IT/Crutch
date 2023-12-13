@@ -61,6 +61,10 @@ android {
             withJavadocJar()
         }
     }
+
+    testOptions {
+        unitTests.isReturnDefaultValues = false
+    }
 }
 
 tasks.withType(Test::class) {

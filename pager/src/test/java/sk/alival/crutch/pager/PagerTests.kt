@@ -10,9 +10,10 @@ import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -99,7 +100,8 @@ class PagerTests {
                 }
             })
             PagerLogger.isPagerDebugModeEnabled = AtomicBoolean(true)
-            val testDispatcher = StandardTestDispatcher(TestCoroutineScheduler())
+            val testDispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
+            Dispatchers.resetMain()
             Dispatchers.setMain(testDispatcher)
         }
     }
@@ -157,9 +159,9 @@ class PagerTests {
     }
 
     @ExperimentalCoroutinesApi
-    @Test
     @DisplayName("Testing paging")
     fun testPaging() = runTest {
+        advanceUntilIdle()
         testingPager.listenForPagingStates().test {
             expectNoEvents()
             testingPager.getFirstPage(this, true)
@@ -169,7 +171,7 @@ class PagerTests {
                 assert(it is PagerStates.Success)
                 assertEquals(it, PagerStates.Success(PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
             }
-
+            advanceUntilIdle()
             // ==========================================================================================
             testingPager.onItemRendered(index = 1, scope = this, isNetworkAvailable = true)
             advanceUntilIdle()
@@ -189,7 +191,7 @@ class PagerTests {
                     )
                 )
             )
-
+            advanceUntilIdle()
             // ==========================================================================================
             testingPager.onItemRendered(index = 3, scope = this, isNetworkAvailable = true)
             advanceUntilIdle()
@@ -211,7 +213,7 @@ class PagerTests {
                     )
                 )
             )
-
+            advanceUntilIdle()
             // ==========================================================================================
             testingPager.onItemRendered(index = 5, scope = this, isNetworkAvailable = true)
             advanceUntilIdle()
@@ -235,7 +237,7 @@ class PagerTests {
                     )
                 )
             )
-
+            advanceUntilIdle()
             // ==========================================================================================
             testingPager.onItemRendered(index = 7, scope = this, isNetworkAvailable = true)
             advanceUntilIdle()
@@ -261,7 +263,7 @@ class PagerTests {
                     )
                 )
             )
-
+            advanceUntilIdle()
             // ==========================================================================================
             testingPager.onItemRendered(index = 9, scope = this, isNetworkAvailable = true)
             advanceUntilIdle()
@@ -276,6 +278,8 @@ class PagerTests {
                     )
                 )
             )
+            advanceUntilIdle()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 }
