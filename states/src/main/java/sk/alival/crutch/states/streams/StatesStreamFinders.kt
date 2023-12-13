@@ -22,9 +22,9 @@ inline fun <reified T : Any> States<*>.findViewStateStreamByType(): StatesStateS
             )
         .also { stream ->
             if (stream == null) {
-                StatesLogger.log { "ViewStateStream for type ${T::class.java.getNameForLogs()} not found\nRegistered: ${this.statesStreamsContainer.dataFlows.mapNotNull { it.key.getNameForLogs() }.joinToString(separator = "\n")}" }
+                StatesLogger.logM { "ViewStateStream for type ${T::class.java.getNameForLogs()} not found\nRegistered: ${this.statesStreamsContainer.dataFlows.mapNotNull { it.key.getNameForLogs() }.joinToString(separator = "\n")}" }
             } else {
-                StatesLogger.log { "ViewStateStream found for type ${T::class.java.getNameForLogs()}" }
+                StatesLogger.logM { "ViewStateStream found for type ${T::class.java.getNameForLogs()}" }
             }
         }
 }
@@ -44,9 +44,9 @@ inline fun <reified T : StatesOneTimeEvents> States<*>.findEventByType(): States
             )
         .also { stream ->
             if (stream == null) {
-                StatesLogger.log { "EventStream for type ${T::class.java.getNameForLogs()} not found\nRegistered: ${this.statesStreamsContainer.oneTimeEvents.mapNotNull { it.key.getNameForLogs() }.joinToString(separator = "\n")}" }
+                StatesLogger.logM { "EventStream for type ${T::class.java.getNameForLogs()} not found\nRegistered: ${this.statesStreamsContainer.oneTimeEvents.mapNotNull { it.key.getNameForLogs() }.joinToString(separator = "\n")}" }
             } else {
-                StatesLogger.log { "EventStream found for type ${T::class.java.getNameForLogs()}" }
+                StatesLogger.logM { "EventStream found for type ${T::class.java.getNameForLogs()}" }
             }
         }
 }

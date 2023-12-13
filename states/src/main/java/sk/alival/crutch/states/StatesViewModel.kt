@@ -1,7 +1,9 @@
 package sk.alival.crutch.states
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import sk.alival.crutch.states.savedStateHandleManager.SavedStateHandleManagerImpl
 import sk.alival.crutch.states.streams.StatesStreamsContainer
 import sk.alival.crutch.states.streams.registerCustomViewState
 
@@ -13,12 +15,14 @@ import sk.alival.crutch.states.streams.registerCustomViewState
  * @property initialState initial state that is created and registered
  */
 abstract class StatesViewModel<VIEWSTATE : Any>(
-    private val initialState: VIEWSTATE
+    private val initialState: VIEWSTATE,
+    savedStateHandle: SavedStateHandle? = null,
+    initialStateSavedStateHandleKey: String? = null
 ) : ViewModel(), States<VIEWSTATE> {
 
-    final override val statesStreamsContainer: StatesStreamsContainer = StatesStreamsContainer(viewModelScope)
+    final override val statesStreamsContainer: StatesStreamsContainer = StatesStreamsContainer(viewModelScope, savedStateHandle?.let { SavedStateHandleManagerImpl(it) })
 
     init {
-        registerCustomViewState(initialState)
+        registerCustomViewState(initialState, initialStateSavedStateHandleKey)
     }
 }

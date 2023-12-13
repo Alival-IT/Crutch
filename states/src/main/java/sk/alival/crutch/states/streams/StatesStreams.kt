@@ -12,7 +12,8 @@ import sk.alival.crutch.states.onetimeEvents.StatesOneTimeEventsWrapper
  */
 data class StatesStateStream<T>(
     val stream: MutableStateFlow<T>,
-    val mutex: Mutex
+    val mutex: Mutex,
+    val savedStateHandleKey: String
 )
 
 /**

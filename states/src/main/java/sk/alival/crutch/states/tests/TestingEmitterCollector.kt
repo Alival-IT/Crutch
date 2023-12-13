@@ -14,12 +14,12 @@ class TestingEmitterCollector : EmitterCollector {
      * Remove all previously collected states and events
      */
     fun reset() {
-        StatesLogger.log { "Resetting EmitterCollector $this" }
+        StatesLogger.logM { "Resetting EmitterCollector $this" }
         emittedStatesAndEvents.clear()
     }
 
     override fun collect(stateOrEvent: Any) {
-        StatesLogger.log { "Collecting state for EmitterCollector $this: $stateOrEvent" }
+        StatesLogger.logM { "Collecting state for EmitterCollector $this: $stateOrEvent" }
         println("Collecting state for EmitterCollector $this: $stateOrEvent")
         emittedStatesAndEvents.add(stateOrEvent)
     }

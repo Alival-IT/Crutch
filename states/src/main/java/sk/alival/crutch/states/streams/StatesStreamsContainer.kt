@@ -3,13 +3,20 @@ package sk.alival.crutch.states.streams
 import kotlinx.coroutines.CoroutineScope
 import sk.alival.crutch.states.States
 import sk.alival.crutch.states.onetimeEvents.StatesOneTimeEvents
+import sk.alival.crutch.states.savedStateHandleManager.SavedStateHandleManager
 import kotlin.reflect.KClass
 
+/**
+ * States streams container
+ *
+ * @property scope on which States operates on
+ * @property savedStateHandleManager for savedStateFunctionality, you can pass an instance of [sk.alival.crutch.states.savedStateHandleManager.SavedStateHandleManagerImpl]
+ * @constructor Create empty States streams container
+ */
 class StatesStreamsContainer(
-    coroutineScope: CoroutineScope,
+    val scope: CoroutineScope,
+    val savedStateHandleManager: SavedStateHandleManager? = null
 ) {
-    val scope: CoroutineScope = coroutineScope
-
     /**
      * Map for your registered states since [States] supports multiple states
      */
