@@ -5,6 +5,7 @@ plugins {
     publish
     jacoco
     alias(libs.plugins.kover)
+    id("kotlin-parcelize")
 }
 
 android {

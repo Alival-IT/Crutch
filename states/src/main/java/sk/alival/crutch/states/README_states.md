@@ -190,6 +190,34 @@ launchOnMain
 launchOnMainImmediate
 ```
 
-## TODO
+## SavedStateHandle
 
-- support for savedStateHandle
+Supported types: [google official doc](https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate#types)
+
+#### StatesViewModel
+
+Pass savedStateHandle to StatesViewModel, its an optional parameter. Its also a good practice to define a custom key, so
+for StatesViewModel initial state, pass a custom key as a parameter `initialStateSavedStateHandleKey`.
+
+For custom states you can pass a custom key during registration of your state.
+`registerCustomViewState(YourState(), customKeyForMyStateForSavedStateHandle)`
+
+#### States interface
+
+Pass savedStateHandleManager during container creation:
+```kotlin
+override val statesStreamsContainer: StatesStreamsContainer = StatesStreamsContainer(scope, savedStateHandleManager)
+```
+You can use a ready made manager `SavedStateHandleManagerImpl` or create your own based on your project setup.
+
+For States interface you can pass a custom key during registration of your state.
+`registerCustomViewState(YourState(), customKeyForMyStateForSavedStateHandle)`
+
+#### Lazy to pass a key?
+
+No worries, we will generate a key based on the class using reflection, check `SavedStateHandleManager.createKey`.
+
+#### Under the hood
+
+On each emit it saves the state to savedStateHandle or SavedStateHandleManager. 
+During registration it checks if there is a previous state under the defined key, or uses the initial state for the state type. 

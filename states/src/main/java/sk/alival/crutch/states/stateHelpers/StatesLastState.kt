@@ -14,9 +14,9 @@ import sk.alival.crutch.states.streams.findViewStateStreamByType
 inline fun <reified T : Any> States<*>.getLastState(): T? {
     return findViewStateStreamByType<T>()?.stream?.value.also {
         if (it == null) {
-            StatesLogger.log { "Last state not found for ${T::class.getNameForLogs()}" }
+            StatesLogger.logM { "Last state not found for ${T::class.getNameForLogs()}" }
         } else {
-            StatesLogger.log { "Last state found: $it" }
+            StatesLogger.logM { "Last state found: $it" }
         }
     }
 }
