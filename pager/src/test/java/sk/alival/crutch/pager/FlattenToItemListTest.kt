@@ -26,7 +26,7 @@ class FlattenToItemListTest {
     fun testFlattenToItemListWithNonEmptyMap() {
         val items = listOf(TestItem("Item1"), TestItem("Item2"), TestItem("Item3"))
         val pagingItemsData = mockk<Pager.PagingItemsData<TestItem>>(relaxed = true)
-        every { pagingItemsData.items } returns items
+        every { pagingItemsData.items } returns items.plus(TestItem("Item3")) // adding same item to test distinctBy
 
         val map = hashMapOf(1 to pagingItemsData)
 

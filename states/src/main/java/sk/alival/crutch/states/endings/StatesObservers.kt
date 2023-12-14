@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import sk.alival.crutch.kover.KoverIgnore
 import sk.alival.crutch.states.States
 import sk.alival.crutch.states.onetimeEvents.StatesOneTimeEvents
 import sk.alival.crutch.states.streams.findEventByType
@@ -25,6 +26,7 @@ import sk.alival.crutch.states.streams.findViewStateStreamByType
  * @param T type of events
  * @param onEvent invoked when new event if received
  */
+@KoverIgnore
 @Composable
 inline fun <reified T : StatesOneTimeEvents> States<*>.observeEvents(crossinline onEvent: (T) -> Unit) {
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -45,6 +47,7 @@ inline fun <reified T : StatesOneTimeEvents> States<*>.observeEvents(crossinline
  * @param T type of events
  * @return value of last emitted state
  */
+@KoverIgnore
 @Composable
 inline fun <reified T : Any> States<T>.observeViewState(): T {
     return this.observeViewStateAsState().value
@@ -56,6 +59,7 @@ inline fun <reified T : Any> States<T>.observeViewState(): T {
  * @param T type of events
  * @return [State] of last emitted value
  */
+@KoverIgnore
 @Composable
 inline fun <reified T : Any> States<T>.observeViewStateAsState(): State<T> {
     return (this.findViewStateStreamByType<T>()?.stream ?: MutableStateFlow(null).filterNotNull() as MutableStateFlow)
@@ -68,6 +72,7 @@ inline fun <reified T : Any> States<T>.observeViewStateAsState(): State<T> {
  * @param T type of events
  * @return value of last emitted state
  */
+@KoverIgnore
 @Composable
 inline fun <reified T : Any> States<*>.observeViewStateWithType(): T {
     return (this.findViewStateStreamByType<T>()?.stream ?: MutableStateFlow(null).filterNotNull() as MutableStateFlow)
@@ -80,6 +85,7 @@ inline fun <reified T : Any> States<*>.observeViewStateWithType(): T {
  * @param T type of events
  * @return [State] of last emitted value
  */
+@KoverIgnore
 @Composable
 inline fun <reified T : Any> States<*>.observeViewStateAsStateWithType(): State<T> {
     return (this.findViewStateStreamByType<T>()?.stream ?: MutableStateFlow(null).filterNotNull() as MutableStateFlow)

@@ -2,6 +2,10 @@ package sk.alival.crutch.states
 
 import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
+import io.mockk.every
+import io.mockk.just
+import io.mockk.mockk
+import io.mockk.runs
 import io.mockk.spyk
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -18,11 +22,14 @@ import sk.alival.crutch.states.streams.unRegisterCustomViewState
 class SavedStateHandleManagerTest : BaseStatesTest() {
 
     private val savedStateHandle: SavedStateHandle = spyk(SavedStateHandle())
+    private val mockedSavedStateHandle: SavedStateHandle = mockk()
+
 
     private val key1 = "key1"
     private val key2 = "key2"
 
     private val testViewModel by lazy { StatesTestViewModel(StatesTestViewState(isLoading = false), savedStateHandle, key1) }
+    private val testViewModelMockedHandle by lazy { StatesTestViewModel(StatesTestViewState(isLoading = false), mockedSavedStateHandle, key1) }
     private val testViewModelWithoutKey by lazy { StatesTestViewModel(StatesTestViewState(isLoading = false), savedStateHandle) }
 
     private val testStatesModel by lazy { StatesTestStatesModel(TestScope(), StatesTestViewState(), SavedStateHandleManagerImpl(savedStateHandle)) }
@@ -109,6 +116,44 @@ class SavedStateHandleManagerTest : BaseStatesTest() {
             Assertions.assertNotNull(testViewModelWithoutKey.findViewStateStreamByType<StatesTestViewState>())
 
             testViewModelWithoutKey.findViewStateStreamByType<StatesTestViewState>().getOrFail().test {
+                Assertions.assertEquals(StatesTestViewState(isLoading = true), awaitItem())
+            }
+        }
+
+        @Test
+        fun testSavedStateHandleViewModelErrorGet() = runTest {
+            // test default state and emit new
+            every { mockedSavedStateHandle.get<Any>(any()) } returns null
+            testViewModelMockedHandle.findViewStateStreamByType<StatesTestViewState>().getOrFail().test {
+                Assertions.assertEquals(StatesTestViewState(isLoading = false), awaitItem())
+
+                every { mockedSavedStateHandle.set<Any>(any(), any()) } just runs
+
+                testViewModelMockedHandle.emitViewState { it.copy(isLoading = true) }
+                Assertions.assertEquals(StatesTestViewState(isLoading = true), awaitItem())
+            }
+
+            // register existing with different key
+            every { mockedSavedStateHandle.get<Any>(any()) } throws (IllegalStateException("Invalid key and type for Testing"))
+            testViewModelMockedHandle.registerCustomViewState(StatesTestViewState(), key1)
+            Assertions.assertNotNull(testViewModelMockedHandle.findViewStateStreamByType<StatesTestViewState>())
+
+            testViewModelMockedHandle.findViewStateStreamByType<StatesTestViewState>().getOrFail().test {
+                // since we registered and get returned error, we should not get the previous value
+                Assertions.assertEquals(StatesTestViewState(isLoading = false), awaitItem())
+            }
+        }
+
+        @Test
+        fun testSavedStateHandleViewModelErrorSet() = runTest {
+            // test default state and emit new
+            every { mockedSavedStateHandle.get<Any>(any()) } returns null
+            testViewModelMockedHandle.findViewStateStreamByType<StatesTestViewState>().getOrFail().test {
+                Assertions.assertEquals(StatesTestViewState(isLoading = false), awaitItem())
+
+                every { mockedSavedStateHandle.set<Any>(any(), any()) } throws (IllegalStateException("Invalid key and type for Testing"))
+
+                testViewModelMockedHandle.emitViewState { it.copy(isLoading = true) }
                 Assertions.assertEquals(StatesTestViewState(isLoading = true), awaitItem())
             }
         }

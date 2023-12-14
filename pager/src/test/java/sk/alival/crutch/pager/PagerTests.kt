@@ -6,6 +6,7 @@ import android.util.Log
 import app.cash.turbine.test
 import io.mockk.every
 import io.mockk.mockkStatic
+import io.mockk.spyk
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +18,9 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
@@ -39,7 +43,7 @@ class PagerTests {
         }
     }
 
-    private var testingPager = TestingPager()
+    private var testingPager = spyk(TestingPager())
 
     // total Items 9
     // total pages 5
@@ -132,13 +136,26 @@ class PagerTests {
     fun testInit() = runTest {
         testingPager.listenForPagingStates().test {
             expectNoEvents()
+            assertFalse(testingPager.isAnyPageLoaded())
             testingPager.getFirstPage(this, true)
             advanceUntilIdle()
+            assertNotNull(testingPager.getNextPageJob())
+            testingPager.getNextPageJob()?.join()
+            assertTrue(testingPager.getNextPageJob()?.isCompleted == true)
             assertEquals(PagerStates.Loading<PagerTestItem>(1, PagerFlags.Initial, mapOf()), awaitItem())
             awaitItem().let {
                 assert(it is PagerStates.Success)
                 assertEquals(it, PagerStates.Success(PagerFlags.Initial, mapOf(1 to Pager.PagingItemsData(9, fetchDataFromApi(1)))))
             }
+
+            assertTrue(testingPager.isAnyPageLoaded())
+
+            cancelAndIgnoreRemainingEvents()
+        }
+        testingPager.cleanAll()
+        testingPager.listenForPagingStates().test {
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

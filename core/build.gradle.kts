@@ -114,7 +114,7 @@ dependencies {
     kover(projects.stringresources)
 }
 
-koverReport{
+koverReport {
     filters {
         excludes {
             classes(
@@ -124,6 +124,10 @@ koverReport{
                 "*StatesLaunchers*",
                 "*Logger*",
                 "*.tests.*",
+            )
+            annotatedBy(
+                "*KoverIgnore*",
+                "*Composable*"
             )
         }
     }

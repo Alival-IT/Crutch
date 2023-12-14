@@ -1,5 +1,7 @@
 package sk.alival.crutch.states
 
+import io.mockk.every
+import io.mockk.mockk
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.jupiter.api.Assertions
@@ -8,6 +10,7 @@ import org.junit.jupiter.api.Test
 import sk.alival.crutch.states.endings.emitViewState
 import sk.alival.crutch.states.endings.emitViewStateWithType
 import sk.alival.crutch.states.stateHelpers.getLastState
+import sk.alival.crutch.states.streams.findViewStateStreamByType
 import sk.alival.crutch.states.streams.registerCustomViewState
 
 class StatesLastStateTests : BaseStatesTest() {
