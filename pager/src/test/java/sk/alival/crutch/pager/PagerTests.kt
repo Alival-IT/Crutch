@@ -4,9 +4,11 @@ package sk.alival.crutch.pager
 
 import android.util.Log
 import app.cash.turbine.test
+import io.mockk.coEvery
 import io.mockk.every
 import io.mockk.mockkStatic
 import io.mockk.spyk
+import java.net.UnknownHostException
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 import kotlinx.coroutines.Dispatchers
@@ -149,6 +151,37 @@ class PagerTests {
             }
 
             assertTrue(testingPager.isAnyPageLoaded())
+
+            cancelAndIgnoreRemainingEvents()
+        }
+        testingPager.cleanAll()
+        testingPager.listenForPagingStates().test {
+            expectNoEvents()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @ExperimentalCoroutinesApi
+    @Test
+    @DisplayName("Testing init fetch")
+    fun testError() = runTest {
+        val testingException = UnknownHostException("Host cannot be reached")
+        testingPager.listenForPagingStates().test {
+            expectNoEvents()
+            assertFalse(testingPager.isAnyPageLoaded())
+            coEvery { testingPager.getPage(any()) } throws (testingException)
+            testingPager.getFirstPage(this, true)
+            advanceUntilIdle()
+            assertNotNull(testingPager.getNextPageJob())
+            testingPager.getNextPageJob()?.join()
+            assertTrue(testingPager.getNextPageJob()?.isCompleted == true)
+            assertEquals(PagerStates.Loading<PagerTestItem>(1, PagerFlags.Initial, mapOf()), awaitItem())
+            awaitItem().let {
+                assert(it is PagerStates.Error)
+                assertEquals(it, PagerStates.Error(testingException, PagerFlags.Initial, emptyMap<Int, Pager.PagingItemsData<PagerTestItem>>()))
+            }
+
+            assertFalse(testingPager.isAnyPageLoaded())
 
             cancelAndIgnoreRemainingEvents()
         }

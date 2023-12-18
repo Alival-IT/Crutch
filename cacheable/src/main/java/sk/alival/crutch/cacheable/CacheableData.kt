@@ -1,6 +1,7 @@
 package sk.alival.crutch.cacheable
 
 import kotlinx.coroutines.flow.Flow
+import sk.alival.crutch.kover.KoverIgnore
 
 /**
  * Cacheable data interface to manage what type of data we are requesting
@@ -15,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
  *
  * @param T - type of data we are getting
  */
+@KoverIgnore
 interface CacheableData<T> {
     /**
      * Get new data

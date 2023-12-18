@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.onEach
 import sk.alival.crutch.coroutines.launchIO
+import sk.alival.crutch.kover.KoverIgnore
 import sk.alival.crutch.logging.getNameForLogs
 import kotlin.math.ceil
 import kotlin.math.min
@@ -79,6 +80,7 @@ abstract class Pager<ITEM_TYPE : PagerItemType> {
      * @param scope  coroutine scope
      * @param isNetworkAvailable  network state
      */
+    @KoverIgnore
     fun onItemRendered(index: Int, scope: CoroutineScope, isNetworkAvailable: Boolean? = null) {
         val numberFromIndex = index + 1 + itemOffsetBeforeNextPage.get() // converting index to number, adding offset
         val nextItemNumber = numberFromIndex + 1 // number of next item
