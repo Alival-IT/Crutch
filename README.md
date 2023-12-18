@@ -1,6 +1,8 @@
 [![Jitpack](https://jitpack.io/v/Alival-IT/Crutch.svg)](https://jitpack.io/#Alival-IT/Crutch)
 [![Maintainability](https://api.codeclimate.com/v1/badges/00440fcc83a3d6e5aec7/maintainability)](https://codeclimate.com/github/Alival-IT/Crutch/maintainability)
 [![codecov](https://codecov.io/gh/Alival-IT/Crutch/graph/badge.svg?token=XOA5HN78S9)](https://codecov.io/gh/Alival-IT/Crutch)
+[![Qodana](https://github.com/Alival-IT/Crutch/actions/workflows/code_quality.yml/badge.svg)](https://github.com/Alival-IT/Crutch/actions/workflows/code_quality.yml)
+
 
 # Crutch
 
